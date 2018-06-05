@@ -15,7 +15,12 @@ namespace RentApp.Persistance.UnitOfWork
 
         [Dependency]
         public IServiceRepository Services { get; set; }
-
+        public IBranchRepository Branches { get; set; }
+        public IVehicleRepository Vehicles { get; set; }
+        public ITypeOfVehicleRepository TypeOfVehicles { get; set; }
+        public IRentRepository Rents { get; set; }
+        public IAppUserRepository AppUsers { get; set;
+        }
         public DemoUnitOfWork(DbContext context)
         {
             _context = context;
