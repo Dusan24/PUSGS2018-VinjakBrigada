@@ -4,6 +4,7 @@ using Microsoft.Owin.Security;
 using RentApp.Models.Entities;
 using RentApp.Persistance;
 using RentApp.Persistance.Repository;
+using RentApp.Persistance.UnitOfWork;
 using RentApp.Providers;
 using System;
 using System.Data.Entity;
@@ -57,6 +58,8 @@ namespace RentApp
             container.RegisterType<IServiceRepository, ServiceRepository>();
             container.RegisterType<ITypeOfVehicleRepository, TypeOfVehicleRepository>();
             container.RegisterType<IVehicleRepository, VehicleRepository>();
+
+            container.RegisterType<IUnitOfWork, DemoUnitOfWork>();
 
             container.RegisterType<DbContext, RADBContext>(new PerRequestLifetimeManager());
             container.RegisterType<ApplicationUserManager>();
