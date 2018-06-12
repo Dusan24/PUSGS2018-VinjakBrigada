@@ -318,13 +318,14 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email };
+            var appUser = new AppUser() { FullName = model.FullName, Email = model.Email, Birthday = model.DateOfBirth, /*CreatingServicesBan = true,*/ /*IsRegistered = false*/ };
+            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, AppUser = appUser };
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            IdentityResult result = await UserManager.CreateAsync(user, user.PasswordHash = RAIdentityUser.HashPassword(model.Password));
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return Content(System.Net.HttpStatusCode.BadRequest, "User already exists!");
             }
 
             return Ok();
