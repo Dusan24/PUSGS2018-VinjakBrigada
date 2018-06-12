@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-branch',
@@ -12,4 +13,7 @@ export class BranchComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit(f: NgForm) {
+    console.log(f.value.adress, f.value.latitude,f.value.longitude);
+  }
 }

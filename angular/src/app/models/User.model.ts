@@ -7,6 +7,6 @@ export class Users{
             public Email: string,
             public DateOfBirth: Date,
             public Password: string,
-            public ConfirmPassword: string
+            public RepeatedPassword: string
         ){ }
     }
