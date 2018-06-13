@@ -10,11 +10,11 @@ namespace RentApp.Hubs
     [HubName("notifications")]
     public class NotificationsHub : Hub
     {
-        //private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext
+        private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationsHub>();
 
         public void Hello()
         {
-            Clients.All.hello();
+            hubContext.Clients.All.hello("Hello svima.");
         }
 
         public void GetRealTime()
