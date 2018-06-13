@@ -17,6 +17,7 @@ using RentApp.Providers;
 using RentApp.Persistance;
 using Microsoft.Owin.Security.DataProtection;
 using System.Web.Mvc;
+using System.Threading.Tasks;
 
 namespace RentApp
 {
@@ -31,7 +32,11 @@ namespace RentApp
         {
             ConfigureOAuthTokenGeneration(app);
             ConfigureOAuthTokenConsumption(app);
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
+            var oabao = new OAuthBearerAuthenticationOptions();
+            oabao.Provider = new QueryStringOAuthBearerProvider("token");
+
+            app.UseOAuthBearerAuthentication(oabao);
             DataProtectionProvider = app.GetDataProtectionProvider();
         }
 
@@ -73,6 +78,29 @@ namespace RentApp
                         new SymmetricKeyIssuerSecurityTokenProvider(issuer, audienceSecret)
                     }
                 });
+        }
+
+        public class QueryStringOAuthBearerProvider : OAuthBearerAuthenticationProvider
+        {
+            readonly string _name;
+
+            public QueryStringOAuthBearerProvider(string name)
+            {
+                _name = name;
+            }
+
+            public override Task RequestToken(OAuthRequestTokenContext context)
+            {
+                var value = context.Request.Query.Get(_name);
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    value = value.Split(' ')[1];
+                    context.Token = value;
+                }
+
+                return Task.FromResult<object>(null);
+            }
         }
     }
 }
