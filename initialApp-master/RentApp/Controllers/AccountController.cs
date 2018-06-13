@@ -276,7 +276,7 @@ namespace RentApp.Controllers
             List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
 
             string state;
-
+             
             if (generateState)
             {
                 const int strengthInBits = 256;
@@ -318,8 +318,8 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var appUser = new AppUser() { FullName = model.FullName, Email = model.Email, Birthday = model.DateOfBirth, /*CreatingServicesBan = true,*/ /*IsRegistered = false*/ };
-            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, AppUser = appUser };
+            var appUser = new AppUser() { FullName = model.FullName, Email = model.Email, Birthday = model.DateOfBirth, Rents = new List<Rent>(), Activated = false /*CreatingServicesBan = true,*/ /*IsRegistered = false*/ };
+            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, AppUser = appUser, PasswordHash = RAIdentityUser.HashPassword(model.Password) };
 
             IdentityResult result = await UserManager.CreateAsync(user, user.PasswordHash = RAIdentityUser.HashPassword(model.Password));
 

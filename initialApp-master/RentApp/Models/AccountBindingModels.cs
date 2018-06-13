@@ -41,9 +41,11 @@ namespace RentApp.Models
 
         [Required]
         [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Display(Name = "DateOfBirth")]
+        [DataType(DataType.DateTime)]
         public DateTime? DateOfBirth { get; set; }
 
         [Required]
