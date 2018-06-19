@@ -11,6 +11,7 @@ using System.Web.Http.Description;
 using RentApp.Models.Entities;
 using RentApp.Persistance;
 using RentApp.Persistance.UnitOfWork;
+using RentApp.Models;
 
 namespace RentApp.Controllers
 {
@@ -82,33 +83,101 @@ namespace RentApp.Controllers
 
         // POST: api/Vehicles
         [ResponseType(typeof(Vehicle))]
-        public IHttpActionResult PostVehicle(Vehicle vehicle)
+        public IHttpActionResult PostVehicle(VehicleBindingModel vehicle)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            unitOfWork.Vehicles.Add(vehicle);
+            var typeOfVehicles = unitOfWork.TypeOfVehicles.GetAll();
+            TypeOfVehicle toV = new TypeOfVehicle();
+
+            foreach (var item in typeOfVehicles)
+            {
+                if (item.Name == vehicle.TypeOfVehicle)
+                {
+                    toV = item;
+                    break;
+                }
+            }
+
+            Vehicle vehi = new Vehicle() { Description = vehicle.Description, Images = new List<string>(), Manufactor = vehicle.Manufactor, Model = vehicle.Model, PricePerHour = vehicle.PricePerHour, Unavailable = false, Year = vehicle.Year, Type = toV };
+
+            if (vehicle.Image != "")
+                vehi.Images.Add(vehicle.Image);
+
+            toV.Vehicles.Add(vehi);
+
+            var services = unitOfWork.Services.GetAll();
+            Service ser = new Service();
+
+            foreach (var item in services)
+            {
+                if (item.Name == vehicle.ServerName)
+                {
+                    ser = item;
+                    break;
+                }
+            }
+
+            ser.Vehicles.Add(vehi);
+
+            unitOfWork.Vehicles.Add(vehi);
+            unitOfWork.TypeOfVehicles.Update(toV);
+            unitOfWork.Services.Update(ser);
             unitOfWork.Complete();
 
-            return CreatedAtRoute("DefaultApi", new { id = vehicle.Id }, vehicle);
+            return CreatedAtRoute("DefaultApi", new { id = vehi.Id }, vehicle);
         }
 
         // DELETE: api/Vehicles/5
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult DeleteVehicle(int id)
         {
-            Vehicle vehicle = unitOfWork.Vehicles.Get(id);
-            if (vehicle == null)
+            var veh = unitOfWork.Vehicles.Get(id);
+
+            if (veh == null)
             {
                 return NotFound();
             }
 
-            unitOfWork.Vehicles.Remove(vehicle);
+            var listOfUsers = unitOfWork.AppUsers.GetAll();
+            var listOfRents = unitOfWork.Rents.GetAll();
+
+            List<Rent> listRentsDelete = new List<Rent>();
+
+            foreach (var r in listOfRents)
+            {
+                if (r.Branch.Id == veh.Id)
+                {
+                    if (r.Start <= DateTime.Now && r.End >= DateTime.Now)
+                        return BadRequest("Service is in use!");
+
+                    listRentsDelete.Add(r);
+                }
+            }
+
+            int brojRent = listRentsDelete.Count;
+
+            foreach (var item in listRentsDelete)
+            {
+                foreach (var item2 in listOfUsers)
+                {
+                    if (item2.Rents.Contains(item))
+                        item2.Rents.Remove(item);
+                }
+            }
+
+            for (int i = 0; i < brojRent; i++)
+            {
+                unitOfWork.Rents.Remove(listRentsDelete[i]);
+            }
+
+            unitOfWork.Vehicles.Remove(veh);
             unitOfWork.Complete();
 
-            return Ok(vehicle);
+            return Ok(veh);
         }
 
         protected override void Dispose(bool disposing)

@@ -7,6 +7,8 @@ namespace RentApp.Models.Entities
 {
     public class Vehicle
     {
+        internal readonly string TypeOfVehicle;
+
         public int Id { get; set; }
         public string Model { get; set; }
         public string Manufactor { get; set; }    

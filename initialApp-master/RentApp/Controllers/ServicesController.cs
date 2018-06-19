@@ -11,6 +11,8 @@ using System.Web.Http.Description;
 using RentApp.Models.Entities;
 using RentApp.Persistance;
 using RentApp.Persistance.UnitOfWork;
+using System.Web;
+using System.IO;
 
 namespace RentApp.Controllers
 {
@@ -95,20 +97,93 @@ namespace RentApp.Controllers
             return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
         }
 
+        [HttpPost]
+        [Route("UploadImage")]
+        public HttpResponseMessage UploadImage()
+        {
+            string imageName = null;
+            var httpRequest = HttpContext.Current.Request;
+            var postedFile = httpRequest.Files["Image"];
+
+            imageName = new string(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+            imageName = imageName + DateTime.Now.ToString("yymmssfff");
+
+            var filePath = HttpContext.Current.Server.MapPath("~/Images/" + imageName);
+
+            postedFile.SaveAs(filePath);
+
+            Service ser = new Service() { Name = httpRequest["Name"], Email = httpRequest["Email"], Logo = imageName, Description = httpRequest["Description"], Branches = new List<Branch>(), Vehicles = new List<Vehicle>() };
+
+            unitOfWork.Services.Add(ser);
+            unitOfWork.Complete();
+
+            return Request.CreateResponse(HttpStatusCode.Created);
+        }
+
         // DELETE: api/Services/5
         [ResponseType(typeof(Service))]
         public IHttpActionResult DeleteService(int id)
         {
-            Service service = unitOfWork.Services.Get(id);
-            if (service == null)
+            var ser = unitOfWork.Services.Get(id);
+
+            if (ser == null)
             {
                 return NotFound();
             }
 
-            unitOfWork.Services.Remove(service);
+            var listOfUsers = unitOfWork.AppUsers.GetAll();
+            var listOfRents = unitOfWork.Rents.GetAll();
+            var listOfBranches = ser.Branches;
+            int brojBranches = listOfBranches.Count();
+            var listOfVehicles = ser.Vehicles;
+            int brojVehicles = listOfVehicles.Count();
+
+            List<Rent> listRentsDelete = new List<Rent>();
+
+            foreach (var b in listOfBranches)
+            {
+                foreach (var r in listOfRents)
+                {
+                    if (r.Branch.Id == b.Id)
+                    {
+                        if (r.Start <= DateTime.Now && r.End >= DateTime.Now)
+                            return BadRequest("Service is in use!");
+
+                        listRentsDelete.Add(r);
+                    }
+                }
+            }
+
+            int brojRent = listRentsDelete.Count;
+
+            foreach (var item in listRentsDelete)
+            {
+                foreach (var item2 in listOfUsers)
+                {
+                    if (item2.Rents.Contains(item))
+                        item2.Rents.Remove(item);
+                }
+            }
+
+            for (int i = 0; i < brojRent; i++)
+            {
+                unitOfWork.Rents.Remove(listRentsDelete[i]);
+            }
+
+            for (int i = 0; i < brojBranches; i++)
+            {
+                unitOfWork.Branches.Remove(listOfBranches[0]);
+            }
+
+            for (int i = 0; i < brojVehicles; i++)
+            {
+                unitOfWork.Vehicles.Remove(listOfVehicles[0]);
+            }
+
+            unitOfWork.Services.Remove(ser);
             unitOfWork.Complete();
 
-            return Ok(service);
+            return Ok(ser);
         }
 
         protected override void Dispose(bool disposing)
