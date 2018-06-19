@@ -15,9 +15,9 @@ namespace RentApp.Persistance.Repository
 
         public IEnumerable<Service> GetAll(int pageIndex, int pageSize)
         {
-            return DemoContext.Services.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            return RADBContext.Services.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
-        protected RADBContext DemoContext { get { return context as RADBContext; } }
+        protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }
