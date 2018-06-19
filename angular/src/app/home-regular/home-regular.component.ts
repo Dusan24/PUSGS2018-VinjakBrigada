@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ListServicesService } from 'src/app/services/list-services.service';
+import {Services} from '../models/Services.model'
+import { AddServiceService } from 'src/app/services/add-service.service';
 import { Observable } from 'rxjs';
 import { NgForm } from '@angular/forms'
 
@@ -7,20 +8,22 @@ import { NgForm } from '@angular/forms'
   selector: 'app-home-regular',
   templateUrl: './home-regular.component.html',
   styleUrls: ['./home-regular.component.css'],
-  providers: [ListServicesService]
+  providers: [AddServiceService]
 })
 export class HomeRegularComponent implements OnInit {
 
-  public services:Observable<any>;
+  
 
-  constructor(private listServicesService: ListServicesService) { }
+  services: Services[];
+
+  constructor(private addServicesService: AddServiceService) { }
 
   ngOnInit() {
     this.callGet();
   }
 
   callGet(){
-    this.listServicesService.getAllServices()
+    this.addServicesService.getAllServices()
     .subscribe(
       data => {
         this.services = data;
@@ -29,6 +32,19 @@ export class HomeRegularComponent implements OnInit {
         console.log(error);
       }
     )
+  }
+
+  deleteService(del) {
+    console.log(del);
+    this.addServicesService.deleteService(del)
+    .subscribe(
+      data=> {
+        alert("You have successfully deleted service!");
+      },
+    error=>{
+      console.log(error);
+      alert("Fail !");
+    })
   }
 
 }

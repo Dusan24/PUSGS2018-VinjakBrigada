@@ -1,5 +1,3 @@
-import { Data } from "@angular/router/src/config";
-
 export class Users{
     
         constructor(
@@ -7,6 +5,6 @@ export class Users{
             public Email: string,
             public DateOfBirth: Date,
             public Password: string,
-            public RepeatedPassword: string
+            public ConfirmPassword: string
         ){ }
     }
