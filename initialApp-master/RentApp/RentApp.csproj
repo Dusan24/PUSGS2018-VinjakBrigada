@@ -47,7 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
-      <HintPath>..\..\..\..\New folder (2)\Pusgs2018-BoromirIFaramir\initialApp-master\packages\Microsoft.AspNet.SignalR.Core.2.2.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\.nuget\packages\Microsoft.AspNet.SignalR.Core\2.2.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
       <HintPath>..\..\..\..\New folder (2)\Pusgs2018-BoromirIFaramir\initialApp-master\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
@@ -327,6 +327,10 @@
     <Compile Include="Migrations\201806130910121_Changes.Designer.cs">
       <DependentUpon>201806130910121_Changes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806191629547_nesto.cs" />
+    <Compile Include="Migrations\201806191629547_nesto.Designer.cs">
+      <DependentUpon>201806191629547_nesto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -457,6 +461,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806130910121_Changes.resx">
       <DependentUpon>201806130910121_Changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806191629547_nesto.resx">
+      <DependentUpon>201806191629547_nesto.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
