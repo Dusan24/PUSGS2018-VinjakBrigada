@@ -1,3 +1,6 @@
+using Microsoft.AspNet.SignalR;
+using RentApp;
+using RentApp.App_Start;
 using System.Web.Http;
 
 using Unity.AspNet.WebApi;
@@ -23,6 +26,7 @@ namespace RentApp
             var resolver = new UnityDependencyResolver(UnityConfig.Container);
 
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
+            GlobalHost.DependencyResolver = new SignalRUnityDependencyResolver(UnityConfig.Container);//Ovo dodati u slucaju da je potreban dependency injection
         }
 
         /// <summary>

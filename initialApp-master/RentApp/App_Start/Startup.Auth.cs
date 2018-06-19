@@ -71,6 +71,7 @@ namespace RentApp
             app.UseJwtBearerAuthentication(
                 new JwtBearerAuthenticationOptions
                 {
+                    Provider = new QueryStringOAuthBearerProvider("token"), //Dodato rukovanje tokenom kroz query string
                     AuthenticationMode = AuthenticationMode.Active,
                     AllowedAudiences = new[] { audienceId },
                     IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
