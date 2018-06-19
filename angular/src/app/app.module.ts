@@ -7,6 +7,7 @@ import { HttpClientXsrfModule } from '@angular/common/http';
 import { Router, RouterModule, Routes, ActivatedRoute } from '@angular/router';
 import { HashLocationStrategy, LocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FileSelectDirective } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { AddServiceComponent } from './add-service/add-service.component';
@@ -18,6 +19,9 @@ import { VehicleComponent } from './vehicle/vehicle.component';
 import { ClockComponent } from './clock/clock.component';
 import { SignalRService } from 'src/app/services/signal-r.service';
 import { HomeRegularComponent } from './home-regular/home-regular.component';
+import { AddTypeOfVehicleComponent } from './add-type-of-vehicle/add-type-of-vehicle.component';
+import { OptionServiceComponent } from './option-service/option-service.component';
+
 
 const Routes=[
   {
@@ -27,10 +31,30 @@ const Routes=[
   {
     path: "login",
     component: LoginFormComponent
-  },
+  },  
   {
     path: "homeRegular",
     component: HomeRegularComponent
+  },
+  {
+    path: "addService",
+    component: AddServiceComponent
+  },
+  {
+    path: "addBranch",
+    component: BranchComponent
+  },
+  {
+    path: "addTypeOfVehicle",
+    component: AddTypeOfVehicleComponent
+  },
+  {
+    path: "addVehicle",
+    component: VehicleComponent
+  },
+  {
+    path: "optionsService",
+    component: OptionServiceComponent
   }
 ]
 
@@ -44,7 +68,10 @@ const Routes=[
     RegisterFormComponent,
     VehicleComponent,
     ClockComponent,
-    HomeRegularComponent
+    HomeRegularComponent,
+    AddTypeOfVehicleComponent,
+    OptionServiceComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
@@ -52,7 +79,7 @@ const Routes=[
     HttpClientModule,
     HttpClientXsrfModule,
     RouterModule.forRoot(Routes),
-    FormsModule
+    FormsModule 
   ],
   providers: [SignalRService],
   bootstrap: [AppComponent]
