@@ -9,13 +9,15 @@
         </div>
         <ul class="nav navbar-nav">
           
-          <li style="font-size: medium; top: 2px;"  ><a [routerLink]="['/optionsService']"><b>Services</b></a></li>
+          <li style="font-size: medium; top: 1px;"  ><a [routerLink]="['/options']"><b>Add</b></a></li>
           
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a *ngIf="!checkIfLogin()" [routerLink]="['/register']"><span class="glyphicon glyphicon-user"></span><b>Register</b></a></li>
           <li><a *ngIf="!checkIfLogin()" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span><b>Login</b></a></li>
           <li><a *ngIf="checkIfLogin()" (click)="logOut()"><span class="glyphicon glyphicon-log-out"></span><b>Logout</b></a></li>
+          <li><a *ngIf="checkIfLogin()" [routerLink]="['/account']"><span class="glyphicon glyphicon-user"></span>Account</a></li>
+          
         </ul>
       </div>
     </nav>
