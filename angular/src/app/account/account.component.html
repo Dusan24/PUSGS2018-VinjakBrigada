@@ -46,7 +46,6 @@
             </div>
             <br>
             <br>
-            
     <form #form = "ngForm" class="groove">
                 <!-- File Button --> 
                   <label class="col-md-4 control-label" for="Logo">Change Image</label>
@@ -69,7 +68,7 @@
   
   </div>
   
-    <div>
+    <div *ngIf="this.changePass">
         
       <form class="form-horizontal" #forma="ngForm" (ngSubmit)="ChangePass(forma.value)">
         <fieldset>
@@ -133,4 +132,8 @@
    
     <!--</div>-->
   
+  </div>
+  
+  <div>
+    
   </div>

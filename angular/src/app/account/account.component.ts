@@ -61,7 +61,7 @@ export class AccountComponent implements OnInit {
     this.loginServiceService.ChangeUserPassword(passwordsNew)
     .subscribe(
       data => {
-        alert("You have successfully changed password!");
+        alert("You have been successfully change password!");
       },
       error => {
         alert("change password wrong!");
@@ -72,7 +72,7 @@ export class AccountComponent implements OnInit {
 
 
   ChangePassword(){
-    return this.changePass = !this.changePass;
+    this.changePass = !this.changePass;
   }
 
   GetUserData(){
@@ -86,5 +86,13 @@ export class AccountComponent implements OnInit {
         console.log(error);
       }
     )
+  }
+
+  isInRole(r: string){
+    if(localStorage.getItem('role') == r){
+      return true;
+    }
+
+    return false;
   }
 }

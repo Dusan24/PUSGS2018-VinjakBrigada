@@ -34,7 +34,7 @@ namespace RentApp.Models
         [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
-        public string RepeatedPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 
     public class RegisterBindingModel

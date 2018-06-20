@@ -9,8 +9,10 @@
         </div>
         <ul class="nav navbar-nav">
           
-          <li style="font-size: medium; top: 1px;"  ><a [routerLink]="['/options']"><b>Add</b></a></li>
-          
+          <li><a [routerLink]="['/services']">Services</a></li>
+          <li><a [routerLink]="['/branch']">Branches</a></li>
+          <li><a [routerLink]="['/vehicle']">Vehicles</a></li>
+          <li><a *ngIf="isInRole('Admin')" [routerLink]="['/addTypeOfVehicle']">Add Type of Vehicles</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a *ngIf="!checkIfLogin()" [routerLink]="['/register']"><span class="glyphicon glyphicon-user"></span><b>Register</b></a></li>
