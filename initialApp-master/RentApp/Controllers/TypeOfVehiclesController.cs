@@ -89,10 +89,20 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            unitOfWork.TypeOfVehicles.Add(typeOfVehicle);
+            var list = unitOfWork.TypeOfVehicles.GetAll();
+
+            foreach (var item in list)
+            {
+                if (item.Name == typeOfVehicle.Name)
+                    return BadRequest("Already is type with this name: " + typeOfVehicle.Name);
+            }
+
+            TypeOfVehicle toV = new TypeOfVehicle() { Name = typeOfVehicle.Name, Vehicles = new List<Vehicle>() };
+
+            unitOfWork.TypeOfVehicles.Add(toV);
             unitOfWork.Complete();
 
-            return CreatedAtRoute("DefaultApi", new { id = typeOfVehicle.Id }, typeOfVehicle);
+            return CreatedAtRoute("DefaultApi", new { id = toV.Id }, typeOfVehicle);
         }
 
         // DELETE: api/TypeOfVehicles/5

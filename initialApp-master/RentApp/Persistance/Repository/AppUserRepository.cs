@@ -19,6 +19,10 @@ namespace RentApp.Persistance.Repository
             return DemoContext.AppUsers.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
+        public AppUser Get(string email)
+        {
+            return DemoContext.AppUsers.First(u => u.Email == email);
+        }
 
         protected RADBContext DemoContext { get { return context as RADBContext; } }
 

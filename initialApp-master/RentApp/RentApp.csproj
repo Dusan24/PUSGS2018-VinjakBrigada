@@ -331,6 +331,10 @@
     <Compile Include="Migrations\201806191629547_nesto.Designer.cs">
       <DependentUpon>201806191629547_nesto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806200918253_changes on model.cs" />
+    <Compile Include="Migrations\201806200918253_changes on model.Designer.cs">
+      <DependentUpon>201806200918253_changes on model.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -464,6 +468,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806191629547_nesto.resx">
       <DependentUpon>201806191629547_nesto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806200918253_changes on model.resx">
+      <DependentUpon>201806200918253_changes on model.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
