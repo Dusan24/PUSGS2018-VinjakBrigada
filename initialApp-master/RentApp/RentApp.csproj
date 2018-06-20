@@ -335,6 +335,14 @@
     <Compile Include="Migrations\201806200918253_changes on model.Designer.cs">
       <DependentUpon>201806200918253_changes on model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806201814309_dodato.cs" />
+    <Compile Include="Migrations\201806201814309_dodato.Designer.cs">
+      <DependentUpon>201806201814309_dodato.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806201825387_dodato1.cs" />
+    <Compile Include="Migrations\201806201825387_dodato1.Designer.cs">
+      <DependentUpon>201806201825387_dodato1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -471,6 +479,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806200918253_changes on model.resx">
       <DependentUpon>201806200918253_changes on model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806201814309_dodato.resx">
+      <DependentUpon>201806201814309_dodato.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806201825387_dodato1.resx">
+      <DependentUpon>201806201825387_dodato1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -12,17 +12,13 @@ using RentApp.Models.Entities;
 using RentApp.Persistance;
 using RentApp.Persistance.UnitOfWork;
 using RentApp.Models;
+using System.Threading.Tasks;
 
 namespace RentApp.Controllers
 {
     public class BranchesController : ApiController
     {
         private readonly IUnitOfWork unitOfWork;
-
-        public BranchesController()
-        {
-
-        }
 
         public BranchesController(IUnitOfWork unitOfWork)
         {
@@ -34,7 +30,22 @@ namespace RentApp.Controllers
             return unitOfWork.Branches.GetAll();
         }
 
-        // GET: api/Branches/5
+        [AllowAnonymous]
+        [Route("api/Branches/ReturnBranchesByServer")]
+        [HttpGet]
+        public List<Branch> ReturnBranchesByServer(int model)
+        {
+            var service = unitOfWork.Services.Get(model);
+            List<Branch> lista = new List<Branch>();
+
+            foreach (var item in service.Branches)
+            {
+                lista.Add(item);
+            }
+
+            return lista;
+        }
+
         [ResponseType(typeof(Branch))]
         public IHttpActionResult GetBranch(int id)
         {
@@ -47,7 +58,6 @@ namespace RentApp.Controllers
             return Ok(branch);
         }
 
-        // PUT: api/Branches/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutBranch(int id, Branch branch)
         {
@@ -60,7 +70,7 @@ namespace RentApp.Controllers
             {
                 return BadRequest();
             }
-            
+
             try
             {
                 unitOfWork.Branches.Update(branch);
@@ -81,7 +91,6 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Branches
         [ResponseType(typeof(Branch))]
         public IHttpActionResult PostBranch(BranchBindingModel branch)
         {
@@ -112,7 +121,6 @@ namespace RentApp.Controllers
             return CreatedAtRoute("DefaultApi", new { id = bra.Id }, branch);
         }
 
-        // DELETE: api/Branches/5
         [ResponseType(typeof(Branch))]
         public IHttpActionResult DeleteBranch(int id)
         {
