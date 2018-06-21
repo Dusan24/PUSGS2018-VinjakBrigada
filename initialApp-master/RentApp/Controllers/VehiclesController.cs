@@ -34,6 +34,23 @@ namespace RentApp.Controllers
             return unitOfWork.Vehicles.GetAll();
         }
 
+        [AllowAnonymous]
+        [Route("api/Vehicle/ReturnVehiclesByServer")]
+        [HttpGet]
+        public List<Vehicle> ReturnVehiclesByServer(int model)
+        {
+            //int id = Int32.Parse(model);
+            var service = unitOfWork.Services.Get(model);
+            List<Vehicle> lista = new List<Vehicle>();
+
+            foreach (var item in service.Vehicles)
+            {
+                lista.Add(item);
+            }
+
+            return lista;
+        }
+
         // GET: api/Vehicles/5
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult GetVehicle(int id)

@@ -200,11 +200,6 @@ namespace RentApp.Models
     public class RentBindingModel
     {
         [Required]
-        [Display(Name = "Start")]
-        [DataType(DataType.DateTime)]
-        public DateTime? Start { get; set; }
-
-        [Required]
         [Display(Name = "End")]
         [DataType(DataType.DateTime)]
         public DateTime? End { get; set; }
@@ -222,6 +217,6 @@ namespace RentApp.Models
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "User")]
-        public int User { get; set; }
+        public string User { get; set; }
     }
 }

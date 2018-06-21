@@ -82,9 +82,6 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (rent.Start > rent.End)
-                return BadRequest("Start time must be lower than end time");
-
             var vehicle = unitOfWork.Vehicles.Get(rent.Vehicle);
 
             if (vehicle.Unavailable == true)
@@ -94,7 +91,7 @@ namespace RentApp.Controllers
 
             var branch = unitOfWork.Branches.Get(rent.Branch);
 
-            Rent rr = new Rent() { Branch = branch, Vehicle = vehicle, Start = rent.Start, End = rent.End };
+            Rent rr = new Rent() { Branch = branch, Vehicle = vehicle, Start = DateTime.Now, End = rent.End };
 
             var user = unitOfWork.AppUsers.Get(rent.User);
 
