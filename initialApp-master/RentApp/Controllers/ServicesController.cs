@@ -97,6 +97,29 @@ namespace RentApp.Controllers
             return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
         }
 
+           [AllowAnonymous]
+           [Route("api/Services/Grade")]
+           [HttpGet]
+           public void Grade(int id, int grade)
+            {
+                var service = unitOfWork.Services.Get(id);
+
+                double ocena = service.Grade;
+
+                ocena += grade;
+
+                if (service.Grade == 0)
+                    ocena = grade;
+                else
+                    ocena /= 2;
+
+                service.Grade = ocena;
+
+                unitOfWork.Services.Update(service);
+                unitOfWork.Complete();
+            }
+
+
         [HttpPost]
         [Route("UploadImage")]
         public HttpResponseMessage UploadImage()

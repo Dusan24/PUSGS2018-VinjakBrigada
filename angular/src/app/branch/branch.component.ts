@@ -55,13 +55,6 @@ export class BranchComponent implements OnInit {
       }
     )
 
-    /*this.braches = [
-      { Address : "braches1", Logo : "aaaa", Latitude : 45.24930344822965, Longitude : 19.833547029022156, ServerName : "1"},
-      { Address : "braches2", Logo : "aaaa", Latitude : 45.244227369427385, Longitude : 19.812089356903016, ServerName : "1"},
-      { Address : "braches3", Logo : "aaaa", Latitude : 45.26464978411942, Longitude : 19.832517060760438, ServerName : "1"},
-      { Address : "braches4", Logo : "aaaa", Latitude : 45.25595000834916, Longitude : 19.868565949920594, ServerName : "1"}
-    ];
-*/
 
     
     this.braches.forEach(obj => {

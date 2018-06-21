@@ -1,3 +1,8 @@
-table{
-    background: aqua;
+body, html {
+    height: 95%;
+}
+h1 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; 
+    text-shadow: 0 0 5px blue, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px blue, 0 0 30px lightblue, 0 0 40px blue, 0 0 50px blue, 0 0 75px violet;
+	letter-spacing: 5px;
+	font: 60px;
 }

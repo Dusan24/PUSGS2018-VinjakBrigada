@@ -39,7 +39,7 @@ export class VehicleComponent implements OnInit {
 
   UnavailableVehicle(veh : Vehicle){
     console.log(veh);
-    debugger
+    
     this.homeRegularService.unavailableVehicle(veh)
     .subscribe(
       data=> {

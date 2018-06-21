@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Services } from '../models/Services.model';
 import { HomeRegularService } from '../services/home-regular.service';
 
+import {Router} from '@angular/router';
+
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -10,11 +12,28 @@ import { HomeRegularService } from '../services/home-regular.service';
 export class ServiceComponent implements OnInit {
 
   services: Services[];
+  selected: number;
 
-  constructor(private homeRegularService: HomeRegularService) { }
+  constructor(private homeRegularService: HomeRegularService , private router: Router) { }
 
   ngOnInit() {
     this.callGetServices();
+  }
+
+  selectChangeHandler(event: any) {
+    this.selected = event.target.value;
+  }
+
+  gradeService(id){
+    this.homeRegularService.gradeService(id, this.selected)
+     .subscribe(
+        data => {
+          console.log("You have succesfully graded service");
+        },
+        error => {
+          console.log(error);
+        }
+     )
   }
 
   callGetServices(){
@@ -35,6 +54,10 @@ export class ServiceComponent implements OnInit {
       { Name : "service4", Logo : "aaaa", Email : "aaa@aaa.aaa", Description : "aaa", Approved : false}
     ];*/
 
+  }
+
+  addRent(id:number){
+    this.router.navigateByUrl('/addrent/' + id);
   }
   
   deleteService(del) {
