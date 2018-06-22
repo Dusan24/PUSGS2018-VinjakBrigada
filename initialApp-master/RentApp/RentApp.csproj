@@ -347,6 +347,14 @@
     <Compile Include="Migrations\201806211248387_hehe.Designer.cs">
       <DependentUpon>201806211248387_hehe.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806212118185_aaa.cs" />
+    <Compile Include="Migrations\201806212118185_aaa.Designer.cs">
+      <DependentUpon>201806212118185_aaa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806212325478_vehicle.cs" />
+    <Compile Include="Migrations\201806212325478_vehicle.Designer.cs">
+      <DependentUpon>201806212325478_vehicle.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -495,6 +503,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806211248387_hehe.resx">
       <DependentUpon>201806211248387_hehe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806212118185_aaa.resx">
+      <DependentUpon>201806212118185_aaa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806212325478_vehicle.resx">
+      <DependentUpon>201806212325478_vehicle.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

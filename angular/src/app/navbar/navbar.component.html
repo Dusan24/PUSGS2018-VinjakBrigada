@@ -9,16 +9,16 @@
         </div>
         <ul class="nav navbar-nav">
           
-          <li><a [routerLink]="['/services']">Services</a></li>
-          <li><a [routerLink]="['/branch']">Branches</a></li>
-          <li><a [routerLink]="['/vehicle']">Vehicles</a></li>
-          <li><a *ngIf="isInRole('Admin')" [routerLink]="['/addTypeOfVehicle']">Add Type of Vehicles</a></li>
+          <li><a [routerLink]="['/services']"><b>Services</b></a></li>
+          <li><a [routerLink]="['/branch']"><b>Branches</b></a></li>
+          <li><a [routerLink]="['/vehicle']"><b>Vehicles</b></a></li>
+          <li><a *ngIf="isInRole('Admin')" [routerLink]="['/addTypeOfVehicle']"><b>Type of Vehicles</b></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a *ngIf="!checkIfLogin()" [routerLink]="['/register']"><span class="glyphicon glyphicon-user"></span><b>Register</b></a></li>
           <li><a *ngIf="!checkIfLogin()" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span><b>Login</b></a></li>
           <li><a *ngIf="checkIfLogin()" (click)="logOut()"><span class="glyphicon glyphicon-log-out"></span><b>Logout</b></a></li>
-          <li><a *ngIf="checkIfLogin()" [routerLink]="['/account']"><span class="glyphicon glyphicon-user"></span>Account</a></li>
+          <li><a *ngIf="checkIfLogin()" [routerLink]="['/account']"><span class="glyphicon glyphicon-user"></span><b>Account</b></a></li>
           
         </ul>
       </div>

@@ -78,67 +78,6 @@ namespace RentApp.Migrations
 
 
 
-            //TypeOfVehicle t1 = new TypeOfVehicle();
-            //t1.Name = "Karavan";
-            //TypeOfVehicle t2 = new TypeOfVehicle();
-            //t2.Name = "Kabrio";
-
-            //Vehicle v1 = new Vehicle()
-            //{
-            //    Manufactor = "Opel",
-            //    Model = "Astra",
-            //    Type = t1,
-            //    Description = "Fin autic",
-            //    PricePerHour = 5,
-            //    Year = 1998,
-            //    Unavailable = false,
-            //    Images = new System.Collections.Generic.List<string>()
-            //};
-            //Vehicle v2 = new Vehicle()
-            //{
-            //    Manufactor = "Mercedes",
-            //    Model = "c220",
-            //    Type = t2,
-            //    Description = "Solidan autic",
-            //    PricePerHour = 8,
-            //    Year = 2001,
-            //    Unavailable = false,
-            //    Images = new System.Collections.Generic.List<string>()
-            //};
-            //Branch b1 = new Branch()
-            //{
-            //    Name = "Prva filijala",
-            //    Address = "Koste Trifkovica 23",
-            //    Latitude = 150.50,
-            //    Longitude = 50.50,
-            //    Logo = "Logo"
-            //};
-            //Service s1 = new Service()
-            //{
-            //    Name = "Prvi Servis",
-            //    Description = "Solidan servis za izdavanje",
-            //    Email = "prvi@gmail.com",
-            //    Logo = "a",
-            //    Branches = new System.Collections.Generic.List<Branch>() { b1 },
-            //    Vehicles = new System.Collections.Generic.List<Vehicle>()
-            //};
-
-            //Service s2 = new Service()
-            //{
-            //    Name = "Drugi Servis",
-            //    Description = "Los servis za izdavanje",
-            //    Email = "drugi@gmail.com",
-            //    Logo = "b",
-            //    Branches = new System.Collections.Generic.List<Branch>() {  },
-            //    Vehicles = new System.Collections.Generic.List<Vehicle>()
-            //};
-
-            //context.Services.Add(s1);
-            //context.TypesOfVehicle.Add(t1);
-            //context.TypesOfVehicle.Add(t2);
-
-            //SaveChanges(context);
-
 
             var userStore = new UserStore<RAIdentityUser>(context);
             var userManager = new UserManager<RAIdentityUser>(userStore);

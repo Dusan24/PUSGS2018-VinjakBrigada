@@ -25,13 +25,15 @@ export class ServiceComponent implements OnInit {
   }
 
   gradeService(id){
-    this.homeRegularService.gradeService(id, this.selected)
+    this.homeRegularService.gradeService(id, this.selected, localStorage.email)
      .subscribe(
         data => {
-          console.log("You have succesfully graded service");
+          alert("You have succesfully graded service");
+          this.callGetServices();
+          //window.location.reload();
         },
         error => {
-          console.log(error);
+          alert(error);
         }
      )
   }
@@ -43,16 +45,9 @@ export class ServiceComponent implements OnInit {
         this.services = data;
       },
       error => {
-        console.log(error);
+        alert(error);
       }
     )
-
-    /*this.services = [
-      { Name : "service1", Logo : "aaaa", Email : "aaa@aaa.aaa", Description : "aaa", Approved : false},
-      { Name : "service2", Logo : "aaaa", Email : "aaa@aaa.aaa", Description : "aaa", Approved : false},
-      { Name : "service3", Logo : "aaaa", Email : "aaa@aaa.aaa", Description : "aaa", Approved : false},
-      { Name : "service4", Logo : "aaaa", Email : "aaa@aaa.aaa", Description : "aaa", Approved : false}
-    ];*/
 
   }
 

@@ -369,13 +369,13 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            /*foreach (AppUser u in unitOfWork.AppUsers.GetAll())
+            foreach (AppUser u in unitOfWork.AppUsers.GetAll())
             {
                 if (u.Email == model.Email)
                 {
                     return Unauthorized();
                 }
-            }*/
+            }
 
             var appuser = new AppUser() { FullName = model.FullName, Email = model.Email, Birthday = model.DateOfBirth, Activated = false, PersonalDocument = null, Rents = new List<Rent>() };
 

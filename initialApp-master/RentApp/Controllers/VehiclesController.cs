@@ -65,6 +65,7 @@ namespace RentApp.Controllers
         }
 
         // PUT: api/Vehicles/5
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutVehicle(int id, Vehicle vehicle)
         {
@@ -119,10 +120,9 @@ namespace RentApp.Controllers
                 }
             }
 
-            Vehicle vehi = new Vehicle() { Description = vehicle.Description, Images = new List<string>(), Manufactor = vehicle.Manufactor, Model = vehicle.Model, PricePerHour = vehicle.PricePerHour, Unavailable = false, Year = vehicle.Year, Type = toV };
+            Vehicle vehi = new Vehicle() { Description = vehicle.Description, Image = vehicle.Image, Manufactor = vehicle.Manufactor, Model = vehicle.Model, PricePerHour = vehicle.PricePerHour, Unavailable = false, Year = vehicle.Year, Type = toV };
 
-            if (vehicle.Image != "")
-                vehi.Images.Add(vehicle.Image);
+            
 
             toV.Vehicles.Add(vehi);
 

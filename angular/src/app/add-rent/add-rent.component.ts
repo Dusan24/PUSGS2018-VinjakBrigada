@@ -86,17 +86,6 @@ export class AddRentComponent implements OnInit {
     })
   }
 
-  /*callGetVehicle(){
-    this.addRentService.getAllVehicle(this.idServe)
-    .subscribe(
-      data => {
-        this.vehicle = data;
-      },
-      error => {
-        console.log(error);
-      }
-    )
-  }*/
 
   static idBranch: number;
 

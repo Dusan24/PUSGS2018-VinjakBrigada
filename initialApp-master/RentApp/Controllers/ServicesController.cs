@@ -90,36 +90,51 @@ namespace RentApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            var list = unitOfWork.Services.GetAll();
+            foreach (var item in list)
+            {
+                if (item.Name == service.Name)
+                    return BadRequest("Service with this name already exists: " + service.Name);
+            }
             unitOfWork.Services.Add(service);
             unitOfWork.Complete();
 
             return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
         }
 
-           [AllowAnonymous]
-           [Route("api/Services/Grade")]
-           [HttpGet]
-           public void Grade(int id, int grade)
+        [Authorize(Roles = "Admin, Manager, AppUser")]
+        [Route("api/Services/Grade")]
+        [HttpGet]
+        public void Grade(int id, int grade, string user)
+        {
+            var service = unitOfWork.Services.Get(id);
+
+            if (service.Grades == null)
+                service.Grades = new List<string>();
+
+            foreach (var item in service.Grades)
             {
-                var service = unitOfWork.Services.Get(id);
-
-                double ocena = service.Grade;
-
-                ocena += grade;
-
-                if (service.Grade == 0)
-                    ocena = grade;
-                else
-                    ocena /= 2;
-
-                service.Grade = ocena;
-
-                unitOfWork.Services.Update(service);
-                unitOfWork.Complete();
+                if (item == user)
+                    return;
             }
 
+            double ocena = service.Grade;
 
+            ocena += grade;
+
+            if (service.Grade == 0)
+                ocena = grade;
+            else
+                ocena /= 2;
+
+            service.Grade = ocena;
+            service.Grades.Add(user);
+
+            unitOfWork.Services.Update(service);
+            unitOfWork.Complete();
+        }
+
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [HttpPost]
         [Route("UploadImage")]
         public HttpResponseMessage UploadImage()
@@ -144,6 +159,7 @@ namespace RentApp.Controllers
         }
 
         // DELETE: api/Services/5
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Service))]
         public IHttpActionResult DeleteService(int id)
         {

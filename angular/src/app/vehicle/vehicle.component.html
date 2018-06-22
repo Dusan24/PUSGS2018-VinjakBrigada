@@ -1,4 +1,5 @@
 <h1>Vehicles for rent</h1>
+<hr>
 <br>
 <br>
 <div class="Row">
@@ -12,14 +13,14 @@
 <table class="table table-striped table-dark" >
     <tbody *ngFor = "let item of vehicles">
         <tr *ngIf="item.Unavailable == false">
-            <td style="width: 250px;"><img width="200" src='{{item.Image}}' />Slika</td>
-            <td>Type: {{item.TypeOfVehicle}}</td>
-            <td>Model: {{item.Model}}</td>
-            <td>Manufactor: {{item.Manufactor}}</td>
-            <td>Year: {{item.Year}}</td>
-            <td>Description: {{item.Description}}</td>
-            <td>Price per hour: {{item.PricePerHour}}</td>
-            <td>Server name: {{item.ServerName}}</td>
+            <td style="width: 250px;"><img width="200" src='{{item.Image}}' /></td>
+            
+            <td><b>Model:</b> {{item.Model}}</td>
+            <td><b>Manufactor:</b>{{item.Manufactor}}</td>
+            <td><b>Year:</b> {{item.Year}}</td>
+            <td><b>Description:</b> {{item.Description}}</td>
+            <td><b>Price per hour:</b> {{item.PricePerHour}}</td>
+            <td>Service name: {{item.ServerName}}</td>
             <td><button *ngIf="isInRole('Manager') || isInRole('Admin')" (click)="deleteVehicle(item.Id)" type="button" class="btn btn-danger">Delete Vehicle</button></td>
         </tr>
     </tbody>
@@ -32,6 +33,7 @@
 <br>
 <h1 *ngIf="(isInRole('Manager') || isInRole('Admin'))">Rented vehicles</h1>
 <br>
+<hr>
 <br>
 <table class="table table-striped table-dark" >
     <tbody *ngFor = "let item of vehicles">
