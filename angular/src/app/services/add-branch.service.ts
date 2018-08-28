@@ -22,6 +22,14 @@ export class AddBranchService {
       return Observable.throw(errorMessage);
     }
 
+    changeBranchData(changedBranch) : Observable<any>{
+      return this.httpClient.post('http://localhost:51680/api/Branches/ChangeBranchData', changedBranch);
+    }
+
+    getBranchById(id) : Observable<any>{
+      return this.httpClient.get(`http://localhost:51680/api/Branches/ReturnBranchById?id=${id.id}`);
+    }
+
     postBranch(newBranch) : Observable<any>{
       return this.httpClient.post('http://localhost:51680/api/Branches', newBranch);
     }

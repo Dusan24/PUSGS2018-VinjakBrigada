@@ -13,6 +13,8 @@ using RentApp.Persistance;
 using RentApp.Persistance.UnitOfWork;
 using System.Web;
 using System.IO;
+using System.Net.Mail;
+using RentApp.Hubs;
 
 namespace RentApp.Controllers
 {
@@ -20,37 +22,181 @@ namespace RentApp.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public ServicesController()
-        {
-
-        }
-
         public ServicesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Service> GetServices()
+        public IEnumerable<Services> GetServices()
         {
+            Check();
+
             return unitOfWork.Services.GetAll();
         }
 
-        // GET: api/Services/5
-        [ResponseType(typeof(Service))]
+        [ResponseType(typeof(Services))]
         public IHttpActionResult GetService(int id)
         {
-            Service service = unitOfWork.Services.Get(id);
+            Services service = unitOfWork.Services.Get(id);
             if (service == null)
+            {
+                return NotFound();
+            }
+
+            if(service.Available == false)
             {
                 return NotFound();
             }
 
             return Ok(service);
         }
+        [Route("api/Services/GetServiceUnAva")]
+        [HttpGet]
+        public IEnumerable<Services> GetServiceUnAva()
+        {
+            var retValue = unitOfWork.Services.GetAll();
+            List<Services> TempreturnValue = new List<Services>();
+            
+            foreach (var item in retValue)
+            {
+                if (item.Available == false)
+                {
+                    TempreturnValue.Add(item);
+                }
+            }
 
-        // PUT: api/Services/5
+            return TempreturnValue as IEnumerable<Services>;
+        }
+
+        public IEnumerable<Services> GetService(int pageIndex, int pageSize)
+        {
+            var retValue = unitOfWork.Services.GetAll(pageIndex, pageSize);
+
+            List<Services> TempretAv = new List<Services>();
+
+            List<Services> TempreturnValue = new List<Services>();
+
+            TempretAv = retValue.ToList();
+
+            foreach (var item in TempretAv)
+            {
+                if(item.Available == true)
+                {
+                    TempreturnValue.Add(item);
+                }
+            }
+
+            return TempreturnValue as IEnumerable<Services>;
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        [Route("api/Services/ChangeServiceData")]
+        [HttpPost]
+        public IHttpActionResult ChangeServiceData(Services service)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ser = unitOfWork.Services.Get(service.Id);
+
+            if (ser == null)
+            {
+                return NotFound();
+            }
+
+            ser.Email = service.Email;
+            if(service.Logo != null)
+                ser.Logo = service.Logo;
+            ser.Description = service.Description;
+
+            unitOfWork.Services.Update(ser);
+            unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        [Route("api/Services/ActivateService")]
+        [HttpGet]
+        public IHttpActionResult ActivateService(int activate, string name)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (activate==1)
+            {
+                var retValue = unitOfWork.Services.GetAll();
+
+                List<Services> services = new List<Services>();
+
+                services = retValue as List<Services>;
+
+                foreach (var item in services)
+                {
+                    if(item.Name == name)
+                    {
+                        item.Available = true;
+
+                        SendMailToManager(item.Owner, true);
+
+                        unitOfWork.Services.Update(item);
+
+                        break;
+                    }
+                }
+            }
+
+            unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        public void SendMailToManager(string email, bool activated)
+        {
+            MailMessage mail = new MailMessage("foksfak@gmail.com", email);
+            SmtpClient client = new SmtpClient();
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential("foksfak@gmail.com", "nadvoznjak");
+            client.Host = "smtp.gmail.com";
+            client.EnableSsl = true;
+            mail.From = new MailAddress("foksfak@gmail.com");
+            mail.To.Add("foksfak@gmail.com");
+            mail.Subject = "Service approved";
+
+            if (activated == true)
+            {
+                mail.Body = "Congratulation";
+                /*try
+                {
+                    client.Send(mail);
+                }
+                catch
+                {
+
+                }*/
+            }
+            else
+            {
+                mail.Body = "Im so sorry";
+                /*try
+                {
+                    client.Send(mail);
+                }
+                catch
+                {
+
+                }*/
+            }
+        }
+
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutService(int id, Service service)
+        [Authorize(Roles = "Admin, Manager")]
+        public IHttpActionResult PutService(int id, Services service)
         {
             if (!ModelState.IsValid)
             {
@@ -82,26 +228,6 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Services
-        [ResponseType(typeof(Service))]
-        public IHttpActionResult PostService(Service service)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var list = unitOfWork.Services.GetAll();
-            foreach (var item in list)
-            {
-                if (item.Name == service.Name)
-                    return BadRequest("Service with this name already exists: " + service.Name);
-            }
-            unitOfWork.Services.Add(service);
-            unitOfWork.Complete();
-
-            return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
-        }
-
         [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("api/Services/Grade")]
         [HttpGet]
@@ -109,10 +235,10 @@ namespace RentApp.Controllers
         {
             var service = unitOfWork.Services.Get(id);
 
-            if (service.Grades == null)
-                service.Grades = new List<string>();
+            if (service.UsersGrade == null)
+                service.UsersGrade = new List<string>();
 
-            foreach (var item in service.Grades)
+            foreach (var item in service.UsersGrade)
             {
                 if (item == user)
                     return;
@@ -128,10 +254,37 @@ namespace RentApp.Controllers
                 ocena /= 2;
 
             service.Grade = ocena;
-            service.Grades.Add(user);
+            service.UsersGrade.Add(user);
 
             unitOfWork.Services.Update(service);
             unitOfWork.Complete();
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        [ResponseType(typeof(Services))]
+        public IHttpActionResult PostService(Services service)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var list = unitOfWork.Services.GetAll();
+
+            foreach (var item in list)
+            {
+                if (item.Name == service.Name)
+                    return BadRequest("Already is service with this name: " + service.Name);
+            }
+
+            Services ser = new Services() { Name = service.Name, Email = service.Email, Logo = service.Logo, Owner = service.Owner, Available = false, Description = service.Description, Branches = new List<Branch>(), Vehicles = new List<Vehicle>(), Grade = 0, UsersGrade = new List<string>() };
+            
+            unitOfWork.Services.Add(ser);
+            unitOfWork.Complete();
+
+            NotificationsHub.NotifyAdmin("New service added and requires aproval!");
+
+            return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
         }
 
         [Authorize(Roles = "Admin, Manager, AppUser")]
@@ -150,7 +303,7 @@ namespace RentApp.Controllers
 
             postedFile.SaveAs(filePath);
 
-            Service ser = new Service() { Name = httpRequest["Name"], Email = httpRequest["Email"], Logo = imageName, Description = httpRequest["Description"], Branches = new List<Branch>(), Vehicles = new List<Vehicle>() };
+            Services ser = new Services() { Name = httpRequest["Name"], Email = httpRequest["Email"], Logo = imageName, Description = httpRequest["Description"], Branches = new List<Branch>(), Vehicles = new List<Vehicle>() };
 
             unitOfWork.Services.Add(ser);
             unitOfWork.Complete();
@@ -158,9 +311,8 @@ namespace RentApp.Controllers
             return Request.CreateResponse(HttpStatusCode.Created);
         }
 
-        // DELETE: api/Services/5
         [Authorize(Roles = "Admin, Manager")]
-        [ResponseType(typeof(Service))]
+        [ResponseType(typeof(Services))]
         public IHttpActionResult DeleteService(int id)
         {
             var ser = unitOfWork.Services.Get(id);
@@ -170,8 +322,8 @@ namespace RentApp.Controllers
                 return NotFound();
             }
 
-            var listOfUsers = unitOfWork.AppUsers.GetAll();
-            var listOfRents = unitOfWork.Rents.GetAll();
+            var listOfUsers = unitOfWork.AppUser.GetAll();
+            var listOfRents = unitOfWork.Rent.GetAll();
             var listOfBranches = ser.Branches;
             int brojBranches = listOfBranches.Count();
             var listOfVehicles = ser.Vehicles;
@@ -206,17 +358,17 @@ namespace RentApp.Controllers
 
             for (int i = 0; i < brojRent; i++)
             {
-                unitOfWork.Rents.Remove(listRentsDelete[i]);
+                unitOfWork.Rent.Remove(listRentsDelete[i]);
             }
 
             for (int i = 0; i < brojBranches; i++)
             {
-                unitOfWork.Branches.Remove(listOfBranches[0]);
+                unitOfWork.Branch.Remove(listOfBranches[0]);
             }
 
             for (int i = 0; i < brojVehicles; i++)
             {
-                unitOfWork.Vehicles.Remove(listOfVehicles[0]);
+                unitOfWork.Vehicle.Remove(listOfVehicles[0]);
             }
 
             unitOfWork.Services.Remove(ser);
@@ -237,6 +389,52 @@ namespace RentApp.Controllers
         private bool ServiceExists(int id)
         {
             return unitOfWork.Services.Get(id) != null;
+        }
+
+        private void Check()
+        {
+            var rents = unitOfWork.Rent.GetAll();
+            var users = unitOfWork.AppUser.GetAll();
+            var vehicles = unitOfWork.Vehicle.GetAll();
+
+            List<Rent> listaRentova = new List<Rent>();
+
+            foreach (var item in rents)
+            {
+                if (item.End <= DateTime.Now)
+                    listaRentova.Add(item);
+            }
+
+            foreach (var item in listaRentova)
+            {
+                foreach (var item2 in users)
+                {
+                    if (item2.Rents.Contains(item))
+                    {
+                        item2.Rents.Remove(item);
+                        unitOfWork.AppUser.Update(item2);
+                    }
+                }
+            }
+
+            foreach (var item in listaRentova)
+            {
+                foreach (var item2 in vehicles)
+                {
+                    if (item.Vehicle == item2)
+                    {
+                        item2.Unavailable = false;
+                        unitOfWork.Vehicle.Update(item2);
+                    }
+                }
+            }
+
+            foreach (var item in listaRentova)
+            {
+                unitOfWork.Rent.Remove(item);
+            }
+
+            unitOfWork.Complete();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace RentApp.Models
 {
@@ -64,7 +65,7 @@ namespace RentApp.Models
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string RepeatedPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 
     public class ChangeUserDataBindingModel
@@ -172,7 +173,7 @@ namespace RentApp.Models
         [DataType(DataType.Text)]
         [Display(Name = "Year")]
         public int Year { get; set; }
-
+        
         [DataType(DataType.Text)]
         [Display(Name = "Description")]
         public string Description { get; set; }
@@ -199,6 +200,11 @@ namespace RentApp.Models
 
     public class RentBindingModel
     {
+        [Required]
+        [Display(Name = "Start")]
+        [DataType(DataType.DateTime)]
+        public DateTime? Start { get; set; }
+
         [Required]
         [Display(Name = "End")]
         [DataType(DataType.DateTime)]

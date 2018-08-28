@@ -1,27 +1,29 @@
 
 
-<div class="row">
-  <div class="col col-md-12">
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a [routerLink]="['/homeRegular']" class="navbar-brand" href="#"><span class="glyphicon glyphicon-home"></span> Rent a car</a>
+<div class="row" >
+    <div class="col col-md-12" >
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div style="background-color: blue" class="navbar-header">
+            <a class="navbar-brand" style="background-color: blue" [routerLink]="['/homeRegular']"> <span class="glyphicon glyphicon-home" style="background-color: blue"></span> <b>Rent a car</b> </a>
+          </div>
+          <ul class="nav navbar-nav">
+            
+            <li><a [routerLink]="['/services']">Services</a></li>
+            <li></li>
+            <li> <a *ngIf="isInRole('Manager') || isInRole('Admin')" [routerLink]="['/branch']"><b>Branches</b></a></li>
+            <li><a [routerLink]="['/vehicle']"><b>Our vehicles</b></a></li>
+            <li><a *ngIf="isInRole('Admin')" [routerLink]="['/addTypeOfVehicle']"><b>Add Type of Vehicles</b></a></li>
+            <li><a *ngIf="isInRole('Manager') || isInRole('Admin') || isInRole('AppUser')" [routerLink]="['/addComment']"><b>Comment</b></a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a *ngIf="checkIfLogin() && isInRole('Admin')" [routerLink]="['/Adminova']"><span class="glyphicon glyphicon-user"></span><b>Admin panel</b></a></li>
+            <li><a *ngIf="!checkIfLogin()" [routerLink]="['/register']"><span class="glyphicon glyphicon-user"></span><b>Sign Up</b></a></li>
+            <li><a *ngIf="!checkIfLogin()" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span><b>Login</b></a></li>
+            <li><a *ngIf="checkIfLogin()" [routerLink]="['/account']"><span class="glyphicon glyphicon-user"></span><b>Account</b></a></li>
+            <li><a *ngIf="checkIfLogin()" id="more" (click)="logOut()"><span class="glyphicon glyphicon-log-out"></span><b>Log out</b></a></li>
+          </ul>
         </div>
-        <ul class="nav navbar-nav">
-          
-          <li><a [routerLink]="['/services']"><b>Services</b></a></li>
-          <li><a [routerLink]="['/branch']"><b>Branches</b></a></li>
-          <li><a [routerLink]="['/vehicle']"><b>Vehicles</b></a></li>
-          <li><a *ngIf="isInRole('Admin')" [routerLink]="['/addTypeOfVehicle']"><b>Type of Vehicles</b></a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a *ngIf="!checkIfLogin()" [routerLink]="['/register']"><span class="glyphicon glyphicon-user"></span><b>Register</b></a></li>
-          <li><a *ngIf="!checkIfLogin()" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span><b>Login</b></a></li>
-          <li><a *ngIf="checkIfLogin()" (click)="logOut()"><span class="glyphicon glyphicon-log-out"></span><b>Logout</b></a></li>
-          <li><a *ngIf="checkIfLogin()" [routerLink]="['/account']"><span class="glyphicon glyphicon-user"></span><b>Account</b></a></li>
-          
-        </ul>
-      </div>
-    </nav>
+      </nav>
+    </div>
   </div>
-</div>

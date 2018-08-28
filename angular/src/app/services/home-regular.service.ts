@@ -5,6 +5,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { HttpHeaders } from '@angular/common/http/src/headers';
+import { Vehicle } from 'src/app/models/Vehicle.model';
+import { Services } from 'src/app/models/Services.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,12 +29,34 @@ export class HomeRegularService {
       return this.httpClient.get('http://localhost:51680/api/Services');
     }
 
+    getAllServicesUna() : Observable<any>{
+      return this.httpClient.get('http://localhost:51680/api/Services/GetServiceUnAva');
+    }
+
+    getAllUsersUna() : Observable<any>{
+      return this.httpClient.get('http://localhost:51680/api/AppUser/GetAppUserUnAva');
+    }
+
     getAllBranches() : Observable<any>{
       return this.httpClient.get('http://localhost:51680/api/Branches');
     }
 
     getAllVehicles() : Observable<any>{
       return this.httpClient.get('http://localhost:51680/api/Vehicles');
+    }
+
+    getMethodVehiclePag(pageNumber, pageSize): Observable<Services[]> {
+      return this.http.get('http://localhost:51680/api/Services?pageIndex='+pageNumber+'&pageSize='+pageSize)
+        .map(this.parseData)
+        .catch(this.handleError);
+    }
+
+    avaliableServer(act, name): Observable<any> {
+      return this.httpClient.get(`http://localhost:51680/api/Services/ActivateService?activate=${act}&name=${name}`);
+    }
+
+    avaliableuser(act, email): Observable<any> {
+      return this.httpClient.get(`http://localhost:51680/api/AppUser/ActivateUser?activate=${act}&email=${email}`);
     }
 
     deleteService(delService) : Observable<any>{
@@ -51,10 +75,11 @@ export class HomeRegularService {
       return this.httpClient.get(`http://localhost:51680/api/Services/Grade?id=${id}&grade=${grade}&user=${localStorage}`);
     }
 
-    unavailableVehicle(unaVehicle) : Observable<any>{                       //videti za ovo sta bi trebalo
-      
-      return //this.httpClient.post(`http://localhost:51680/api/Vehicles?id=${unaVehicle}`);
+    unavailableVehicle(unaVehicle) : Observable<any>{
+      return this.httpClient.get(`http://localhost:51680/api/Vehicles/Unavailable?id=${unaVehicle}`);
     }
 
-    
+    searchVehicle(name, option) : Observable<any>{
+      return this.httpClient.get(`http://localhost:51680/api/Vehicles/SearchVehicle?name=${name}&opt=${option}`);
+    }
 }

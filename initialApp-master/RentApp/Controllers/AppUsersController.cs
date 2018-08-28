@@ -11,6 +11,7 @@ using System.Web.Http.Description;
 using RentApp.Models.Entities;
 using RentApp.Persistance;
 using RentApp.Persistance.UnitOfWork;
+using System.Net.Mail;
 
 namespace RentApp.Controllers
 {
@@ -18,26 +19,162 @@ namespace RentApp.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public AppUsersController()
-        {
-
-        }
-
         public AppUsersController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<AppUser> GetAppUsers()
+        [Route("api/AppUser/GetAppUserUnAva")]
+        [HttpGet]
+        public IEnumerable<AppUser> GetAppUserUnAva()
         {
-            return unitOfWork.AppUsers.GetAll();
+            var retValue = unitOfWork.AppUser.GetAll();
+            List<AppUser> TempreturnValue = new List<AppUser>();
+
+            foreach (var item in retValue)
+            {
+                if (item.Activated == false)
+                {
+                    TempreturnValue.Add(item);
+                }
+            }
+
+            return TempreturnValue as IEnumerable<AppUser>;
         }
 
-        // GET: api/AppUsers/5
+        [Route("api/AppUser/ActivateUser")]
+        [HttpGet]
+        public IHttpActionResult ActivateUser(int activate, string email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (activate == 1)
+            {
+                var retValue = unitOfWork.AppUser.GetAll();
+
+                List<AppUser> users = new List<AppUser>();
+
+                users = retValue as List<AppUser>;
+
+                foreach (var item in users)
+                {
+                    if (item.Email == email)
+                    {
+                        item.Activated = true;
+
+                        SendMailToUser(email, true);
+
+                        unitOfWork.AppUser.Update(item);
+
+                        break;
+                    }
+                }
+            }
+
+            unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        public void SendMailToUser(string email, bool activated)
+        {
+
+             /*private void sendEmailViaWebApi()
+        {
+            string subject = "Email Subject";
+            string body = "Email body";
+            string FromMail = "shahid@reckonbits.com.pk";
+            string emailTo = "reciever@reckonbits.com.pk";
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("mail.reckonbits.com.pk");
+            mail.From = new MailAddress(FromMail);
+            mail.To.Add(emailTo);
+            mail.Subject = subject;
+            mail.Body = body;
+            SmtpServer.Port = 25;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("shahid@reckonbits.com.pk", "your password");
+            SmtpServer.EnableSsl = false;
+            SmtpServer.Send(mail);
+        }
+        */
+            if(activated == true)
+            {
+                /*send positive mail to email adress
+                MailMessage mail = new MailMessage("foksfak@gmail.com", email);
+                SmtpClient client = new SmtpClient();
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("foksfak@gmail.com", "nadvoznjak");
+                client.Host = "smtp.gmail.com";
+                client.EnableSsl = true;
+                mail.From = new MailAddress("foksfak@gmail.com");
+                mail.To.Add("foksfak@gmail.com");
+                mail.Subject = "Account approved";
+                mail.Body = "Congratulation";
+                try
+                {
+                    client.Send(mail);
+                }
+                catch
+                {
+
+                }*/
+            }
+            else
+            {
+                /*send negative mail to email adress
+                MailMessage mail = new MailMessage("foksfak@gmail.com", email);
+                SmtpClient client = new SmtpClient();
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("foksfak@gmail.com", "nadvoznjak");
+                client.Host = "smtp.gmail.com";
+                client.EnableSsl = true;
+                mail.From = new MailAddress("foksfak@gmail.com");
+                mail.To.Add("foksfak@gmail.com");
+                mail.Subject = "Account not approved";
+                mail.Body = "Im so sorry";
+                try
+                {
+                    client.Send(mail);
+                }
+                catch
+                {
+
+                }*/
+            }
+        }
+
+        public IEnumerable<AppUser> GetAppUsers()
+        {
+            var retValue = unitOfWork.AppUser.GetAll();
+
+            List<AppUser> TempretAv = new List<AppUser>();
+
+            List<AppUser> TempreturnValue = new List<AppUser>();
+
+            TempretAv = retValue as List<AppUser>;
+
+            foreach (var item in TempretAv)
+            {
+                if (item.Activated == false)
+                {
+                    TempreturnValue.Add(item);
+                }
+            }
+
+            return TempreturnValue as IEnumerable<AppUser>;
+        }
+
         [ResponseType(typeof(AppUser))]
         public IHttpActionResult GetAppUser(int id)
         {
-            AppUser appUser = unitOfWork.AppUsers.Get(id);
+            AppUser appUser = unitOfWork.AppUser.Get(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -45,8 +182,7 @@ namespace RentApp.Controllers
 
             return Ok(appUser);
         }
-
-        // PUT: api/AppUsers/5
+        
         [ResponseType(typeof(void))]
         public IHttpActionResult PutAppUser(int id, AppUser appUser)
         {
@@ -62,7 +198,7 @@ namespace RentApp.Controllers
 
             try
             {
-                unitOfWork.AppUsers.Update(appUser);
+                unitOfWork.AppUser.Update(appUser);
                 unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
@@ -79,8 +215,7 @@ namespace RentApp.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
-        // POST: api/AppUsers
+        
         [ResponseType(typeof(AppUser))]
         public IHttpActionResult PostAppUser(AppUser appUser)
         {
@@ -89,23 +224,22 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            unitOfWork.AppUsers.Add(appUser);
+            unitOfWork.AppUser.Add(appUser);
             unitOfWork.Complete();
 
             return CreatedAtRoute("DefaultApi", new { id = appUser.Id }, appUser);
         }
-
-        // DELETE: api/AppUsers/5
+        
         [ResponseType(typeof(AppUser))]
         public IHttpActionResult DeleteAppUser(int id)
         {
-            AppUser appUser = unitOfWork.AppUsers.Get(id);
+            AppUser appUser = unitOfWork.AppUser.Get(id);
             if (appUser == null)
             {
                 return NotFound();
             }
 
-            unitOfWork.AppUsers.Remove(appUser);
+            unitOfWork.AppUser.Remove(appUser);
             unitOfWork.Complete();
 
             return Ok(appUser);
@@ -122,7 +256,7 @@ namespace RentApp.Controllers
 
         private bool AppUserExists(int id)
         {
-            return unitOfWork.AppUsers.Get(id) != null;
+            return unitOfWork.AppUser.Get(id) != null;
         }
     }
 }

@@ -71,7 +71,7 @@ namespace RentApp.Migrations
 
                 p => p.FullName,
 
-                new AppUser() { FullName = "AppUser AppUserovic", Activated = false, Birthday = DateTime.Today,Email = "gmail",Rents = new System.Collections.Generic.List<Rent>()}
+                new AppUser() { FullName = "AppUser AppUserovic", Activated = false, DateOfBirth = DateTime.Today,Email = "gmail",Rents = new System.Collections.Generic.List<Rent>()}
                
             );
   

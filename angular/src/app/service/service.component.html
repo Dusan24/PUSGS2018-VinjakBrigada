@@ -1,33 +1,7 @@
-<h1>Service</h1>
+<h1 align=center>Services</h1>
 <br>
+<hr>
 <br>
-
-
-  <br>
-
-<table class="table table-striped table-dark" >
-    <tbody *ngFor = "let item of services">
-        <tr>
-            <td style="width: 250px;"><img width="200" [src]="item.Logo" /></td>
-            <td><b>Name:</b> {{item.Name}}</td>
-            <td><b>Description:</b> {{item.Description}}</td>
-            <td><b>Email:</b> {{item.Email}}</td>
-            <td><b>Grade:</b> {{item.Grade}}</td>
-            <td><button (click)="addRent(item.Id)" type="button" class="btn btn-danger">Rent Vehicle</button></td>
-            <td><button *ngIf="isInRole('Manager') || isInRole('Admin')" (click)="deleteService(item.Id)" type="button" class="btn btn-danger">Delete Service</button></td>
-            <td>
-                <select class="form-control" (change)="selectChangeHandler($event)">
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select> 
-            </td>
-            <td><button (click)="gradeService(item.Id)" type="button" class="btn btn-primary">Grade Service</button></td>
-        </tr>
-    </tbody>
-</table>
 <br>
 
 <div class="Row" *ngIf="isInRole('Manager') || isInRole('Admin')">
@@ -37,3 +11,44 @@
   </div>
   <br>
   <br>
+  <br>
+
+<table class="table table-striped table-hover" >
+    <tbody *ngFor = "let item of services">
+        <tr>
+            <td><img style="width:100%; max-width: 100px;" src='{{item.Logo}}' /></td>
+            <td><b>Name:</b><br> {{item.Name}}</td>
+            <td><b>Description:</b><br> {{item.Description}}</td>
+            <td><b>Email:</b><br> {{item.Email}}</td>
+            
+            <td><button (click)="addRent(item.Id)" *ngIf="isInRole('Manager') || isInRole('Admin') || isInRole('AppUser')" type="button" class="btn btn-success"><b></b>Rent Vehicle</button></td>
+            <td><button *ngIf="isInRole('Manager') || isInRole('Admin')" (click)="changeService(item.Id)" type="button" class="btn btn-warning"><b></b>Edit Service</button></td>
+            <td><button *ngIf="isInRole('Manager') || isInRole('Admin')" (click)="deleteService(item.Id)" type="button" class="btn btn-danger"><b></b>Delete Service</button></td>
+            <td><b>Grade:</b> <br> {{item.Grade}}</td>
+            <td *ngIf="isInRole('Manager') || isInRole('Admin') || isInRole('AppUser')">
+                <select class="form-control" (change)="selectChangeHandler($event)">
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select> 
+            </td>
+            <td><button *ngIf="isInRole('Manager') || isInRole('Admin') || isInRole('AppUser')" (click)="gradeService(item.Id)" type="button" class="btn btn-primary">Grade Service</button></td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<table class="table table-striped table-dark" align="center">
+    <tr>
+        <td align="left"><a id="more" style="font-size: 15px;text-align:left" *ngIf="canPush==true" (click)="decPageNumber()">Previous page</a></td>
+        <!--<td align="center"><a id="more" style="font-size: 30px;text-align:center" (click)="setPageNumber(1)">First Page</a></td>-->
+        <td *ngIf="this.br" align="right"><a id="more" style="font-size: 15px;text-align:right" (click)="incPageNumber()">Next page</a></td>
+    </tr>
+</table>
+
+<br>
+<p style="font-size: 10px;text-align:center">Page:{{this.pageNumber}}</p>

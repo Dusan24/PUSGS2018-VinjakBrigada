@@ -30,14 +30,14 @@ namespace RentApp.Controllers
 
         public IEnumerable<TypeOfVehicle> GetServices()
         {
-            return unitOfWork.TypeOfVehicles.GetAll();
+            return unitOfWork.TypeOfVehicle.GetAll();
         }
 
         // GET: api/TypeOfVehicles/5
         [ResponseType(typeof(TypeOfVehicle))]
         public IHttpActionResult GetTypeOfVehicle(int id)
         {
-            TypeOfVehicle typeOfVehicle = unitOfWork.TypeOfVehicles.Get(id);
+            TypeOfVehicle typeOfVehicle = unitOfWork.TypeOfVehicle.Get(id);
             if (typeOfVehicle == null)
             {
                 return NotFound();
@@ -62,7 +62,7 @@ namespace RentApp.Controllers
 
             try
             {
-                unitOfWork.TypeOfVehicles.Update(typeOfVehicle);
+                unitOfWork.TypeOfVehicle.Update(typeOfVehicle);
                 unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
@@ -89,7 +89,7 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var list = unitOfWork.TypeOfVehicles.GetAll();
+            var list = unitOfWork.TypeOfVehicle.GetAll();
 
             foreach (var item in list)
             {
@@ -99,7 +99,7 @@ namespace RentApp.Controllers
 
             TypeOfVehicle toV = new TypeOfVehicle() { Name = typeOfVehicle.Name, Vehicles = new List<Vehicle>() };
 
-            unitOfWork.TypeOfVehicles.Add(toV);
+            unitOfWork.TypeOfVehicle.Add(toV);
             unitOfWork.Complete();
 
             return CreatedAtRoute("DefaultApi", new { id = toV.Id }, typeOfVehicle);
@@ -109,13 +109,13 @@ namespace RentApp.Controllers
         [ResponseType(typeof(TypeOfVehicle))]
         public IHttpActionResult DeleteTypeOfVehicle(int id)
         {
-            TypeOfVehicle typeOfVehicle = unitOfWork.TypeOfVehicles.Get(id);
+            TypeOfVehicle typeOfVehicle = unitOfWork.TypeOfVehicle.Get(id);
             if (typeOfVehicle == null)
             {
                 return NotFound();
             }
 
-            unitOfWork.TypeOfVehicles.Remove(typeOfVehicle);
+            unitOfWork.TypeOfVehicle.Remove(typeOfVehicle);
             unitOfWork.Complete();
 
             return Ok(typeOfVehicle);
@@ -132,7 +132,7 @@ namespace RentApp.Controllers
 
         private bool TypeOfVehicleExists(int id)
         {
-            return unitOfWork.TypeOfVehicles.Get(id) != null;
+            return unitOfWork.TypeOfVehicle.Get(id) != null;
         }
     }
 }

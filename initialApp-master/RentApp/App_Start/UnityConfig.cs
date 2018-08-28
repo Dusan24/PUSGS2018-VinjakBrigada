@@ -56,11 +56,12 @@ namespace RentApp
             container.RegisterType<IAppUserRepository, AppUserRepository>();
             container.RegisterType<IBranchRepository, BranchRepository>();
             container.RegisterType<IRentRepository, RentRepository>();
-            container.RegisterType<IServiceRepository, ServiceRepository>();
+            container.RegisterType<IServicesRepository, ServicesRepository>();
             container.RegisterType<ITypeOfVehicleRepository, TypeOfVehicleRepository>();
             container.RegisterType<IVehicleRepository, VehicleRepository>();
+            container.RegisterType<ICommentRepository, CommentRepository>();
 
-            container.RegisterType<IUnitOfWork, DemoUnitOfWork>();
+            container.RegisterType<IUnitOfWork, RADBUnitOfWork>();
 
             container.RegisterType<DbContext, RADBContext>(new PerRequestLifetimeManager());
             container.RegisterType<ApplicationUserManager>();

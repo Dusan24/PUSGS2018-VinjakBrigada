@@ -4,6 +4,7 @@ import { Branch } from '../models/Branch.model';
 
 import { MapInfo } from '../models/map-info.model';
 import { Marker } from '../models/marker.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-branch',
@@ -22,7 +23,7 @@ export class BranchComponent implements OnInit {
   private marker: Marker = new Marker(0,0);
   private Tempmarker: Marker = new Marker(0,0);
 
-  constructor(private homeRegularService: HomeRegularService) {
+  constructor(private homeRegularService: HomeRegularService , private router: Router) {
     this.mapInfo = new MapInfo(45.25800424228705, 19.833547029022156, 
       "assets/ftn.png",
       "Novi Sad" , "" , "");
@@ -45,22 +46,33 @@ export class BranchComponent implements OnInit {
     .subscribe(
       data => {
         this.braches = data;
-        this.braches.forEach(obj => {
-          this.marker = new Marker(obj.Latitude, obj.Longitude);
-          this.markers.push(this.marker);
-        })
+        if(this.braches.length > 0){
+          this.braches.forEach(obj => {
+            this.marker = new Marker(obj.Latitude, obj.Longitude);
+            this.markers.push(this.marker);
+          })
+        }
       },
       error => {
-        console.log(error);
+        alert(error);
       }
     )
 
+    /*this.braches = [
+      { Address : "braches1", Logo : "aaaa", Latitude : 45.24930344822965, Longitude : 19.833547029022156, ServerName : "1", Id : 1},
+      { Address : "braches2", Logo : "aaaa", Latitude : 45.244227369427385, Longitude : 19.812089356903016, ServerName : "1", Id : 2},
+      { Address : "braches3", Logo : "aaaa", Latitude : 45.26464978411942, Longitude : 19.832517060760438, ServerName : "1", Id : 3},
+      { Address : "braches4", Logo : "aaaa", Latitude : 45.25595000834916, Longitude : 19.868565949920594, ServerName : "1", Id : 4}
+    ];
 
-    
     this.braches.forEach(obj => {
       this.marker = new Marker(obj.Latitude, obj.Longitude);
       this.markers.push(this.marker);
-    })
+    })*/
+  }
+
+  changeBranch(id:number){
+    this.router.navigateByUrl('/changeBranch/' + id);
   }
 
   deleteBranch(del) {
@@ -69,10 +81,10 @@ export class BranchComponent implements OnInit {
     .subscribe(
       data=> {
         alert("You have been successfully delete branch!");
+        this.callGetBranch();
       },
     error=>{
-      console.log(error);
-      alert("Fail !");
+      alert(error);
     })
   }
 

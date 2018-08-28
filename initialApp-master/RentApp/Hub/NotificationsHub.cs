@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+using System.Threading;
 
 namespace RentApp.Hubs
 {
@@ -9,10 +12,10 @@ namespace RentApp.Hubs
     public class NotificationsHub : Hub
     {
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationsHub>();
-
-        public void Hello()
+        //private static Timer t = new Timer();
+        public static void Hello()
         {
-            hubContext.Clients.All.hello("Hello svima.");
+            hubContext.Clients.All.hello();
         }
 
         public void GetRealTime()
@@ -20,9 +23,9 @@ namespace RentApp.Hubs
             Clients.All.setRealTime(DateTime.Now.ToString("h:mm:ss tt"));
         }
 
-        public void TimeServerUpdates()
+        public static void NotifyAdmin(string message)
         {
-
+            hubContext.Clients.All.notify(message);
         }
     }
 }

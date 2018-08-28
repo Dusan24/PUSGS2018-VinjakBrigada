@@ -24,5 +24,16 @@ export class LoginFormComponent implements OnInit {
     var a = this.loginServiceService.sendData(user)
     console.log(a)
     
+    
+    
+    // .subscribe(
+    //   message => {
+    //     debugger
+    //     console.log(message);
+    //   },
+    //   error => {
+    //     debugger
+    //     console.log(error);
+    //   })
   }
 }

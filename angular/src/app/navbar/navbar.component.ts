@@ -24,6 +24,7 @@ export class NavbarComponent implements OnInit {
     if(localStorage.jwt){
       localStorage.clear();
     }
+    this.router.navigate(['/homeRegular']);
   }
 
   isInRole(r: string){

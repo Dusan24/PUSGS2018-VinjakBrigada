@@ -19,19 +19,14 @@ namespace RentApp.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public VehiclesController()
-        {
-
-        }
-
         public VehiclesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Vehicle> GetServices()
+        public IEnumerable<Vehicle> GetVehicles()
         {
-            return unitOfWork.Vehicles.GetAll();
+            return unitOfWork.Vehicle.GetAll();
         }
 
         [AllowAnonymous]
@@ -51,11 +46,82 @@ namespace RentApp.Controllers
             return lista;
         }
 
-        // GET: api/Vehicles/5
+        [Authorize(Roles = "Admin, Manager")]
+        [AllowAnonymous]
+        [Route("api/Vehicles/Unavailable")]
+        [HttpGet]
+        public IHttpActionResult Unavailable(int id)
+        {
+            var vehicle = unitOfWork.Vehicle.Get(id);
+            var rents = unitOfWork.Rent.GetAll();
+
+            foreach (var item in rents)
+            {
+                if (item.Vehicle == vehicle)
+                {
+                    if (item.End >= DateTime.Now)
+                        return BadRequest("Vehicle is in use!"); 
+                }
+            }
+
+            if (vehicle.Unavailable == false)
+                vehicle.Unavailable = true;
+            else
+                vehicle.Unavailable = false;
+
+            unitOfWork.Vehicle.Update(vehicle);
+            unitOfWork.Complete();
+
+            return Ok(vehicle);
+        }
+
+        [Authorize(Roles = "Admin, Manager, AppUser")]
+        [AllowAnonymous]
+        [Route("api/Vehicles/SearchVehicle")]
+        [HttpGet]
+        public List<Vehicle> SearchVehicle(string name, string opt)
+        {
+            var vehicles = unitOfWork.Vehicle.GetAll();
+            List<Vehicle> lista = new List<Vehicle>();
+            int number = 0;
+
+            if (opt == "Price")
+                number = Convert.ToInt32(name);
+
+            foreach (var item in vehicles)
+            {
+                if (item.Unavailable == true)
+                    continue;
+
+                if (opt == "Model")
+                {
+                    if (item.Model == name)
+                        lista.Add(item);
+                }
+                else if (opt == "Price")
+                {
+                    if (item.PricePerHour >= number)
+                        lista.Add(item);
+                }
+            }
+
+            return lista;
+        }
+
+
+        public IEnumerable<Vehicle> GetVehicles(int pageIndex, int pageSize)
+        {
+            var retValue = unitOfWork.Vehicle.GetAll(pageIndex, pageSize);
+
+            return retValue;
+        }
+
+
+
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult GetVehicle(int id)
         {
-            Vehicle vehicle = unitOfWork.Vehicles.Get(id);
+            Vehicle vehicle = unitOfWork.Vehicle.Get(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -64,7 +130,6 @@ namespace RentApp.Controllers
             return Ok(vehicle);
         }
 
-        // PUT: api/Vehicles/5
         [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutVehicle(int id, Vehicle vehicle)
@@ -81,7 +146,7 @@ namespace RentApp.Controllers
             
             try
             {
-                unitOfWork.Vehicles.Update(vehicle);
+                unitOfWork.Vehicle.Update(vehicle);
                 unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
@@ -99,7 +164,7 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Vehicles
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult PostVehicle(VehicleBindingModel vehicle)
         {
@@ -108,7 +173,15 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var typeOfVehicles = unitOfWork.TypeOfVehicles.GetAll();
+            var list = unitOfWork.Vehicle.GetAll();
+
+            foreach (var item in list)
+            {
+                if (item.Model == vehicle.Model)
+                    return BadRequest("Already is vehicle with this name: " + vehicle.Model);
+            }
+
+            var typeOfVehicles = unitOfWork.TypeOfVehicle.GetAll();
             TypeOfVehicle toV = new TypeOfVehicle();
 
             foreach (var item in typeOfVehicles)
@@ -122,12 +195,12 @@ namespace RentApp.Controllers
 
             Vehicle vehi = new Vehicle() { Description = vehicle.Description, Image = vehicle.Image, Manufactor = vehicle.Manufactor, Model = vehicle.Model, PricePerHour = vehicle.PricePerHour, Unavailable = false, Year = vehicle.Year, Type = toV };
 
-            
+          
 
             toV.Vehicles.Add(vehi);
 
             var services = unitOfWork.Services.GetAll();
-            Service ser = new Service();
+            Services ser = new Services();
 
             foreach (var item in services)
             {
@@ -140,27 +213,28 @@ namespace RentApp.Controllers
 
             ser.Vehicles.Add(vehi);
 
-            unitOfWork.Vehicles.Add(vehi);
-            unitOfWork.TypeOfVehicles.Update(toV);
+            unitOfWork.Vehicle.Add(vehi);
+            unitOfWork.TypeOfVehicle.Update(toV);
             unitOfWork.Services.Update(ser);
             unitOfWork.Complete();
 
-            return CreatedAtRoute("DefaultApi", new { id = vehi.Id }, vehicle);
+            return CreatedAtRoute("DefaultApi", new { id = vehi.Id }, vehicle);          
         }
 
         // DELETE: api/Vehicles/5
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult DeleteVehicle(int id)
         {
-            var veh = unitOfWork.Vehicles.Get(id);
+            var veh = unitOfWork.Vehicle.Get(id);
 
             if (veh == null)
             {
                 return NotFound();
             }
 
-            var listOfUsers = unitOfWork.AppUsers.GetAll();
-            var listOfRents = unitOfWork.Rents.GetAll();
+            var listOfUsers = unitOfWork.AppUser.GetAll();
+            var listOfRents = unitOfWork.Rent.GetAll();
 
             List<Rent> listRentsDelete = new List<Rent>();
 
@@ -188,10 +262,10 @@ namespace RentApp.Controllers
 
             for (int i = 0; i < brojRent; i++)
             {
-                unitOfWork.Rents.Remove(listRentsDelete[i]);
+                unitOfWork.Rent.Remove(listRentsDelete[i]);
             }
 
-            unitOfWork.Vehicles.Remove(veh);
+            unitOfWork.Vehicle.Remove(veh);
             unitOfWork.Complete();
 
             return Ok(veh);
@@ -208,7 +282,7 @@ namespace RentApp.Controllers
 
         private bool VehicleExists(int id)
         {
-            return unitOfWork.Vehicles.Get(id) != null;
+            return unitOfWork.Vehicle.Get(id) != null;
         }
     }
 }

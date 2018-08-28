@@ -1,0 +1,71 @@
+  
+  <legend>Change Service: {{service.Name}}</legend>
+
+ <div class="col-md-1">
+    <img width="200" src='{{service.Logo}}' />
+  </div>
+
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="form-horizontal">
+  <fieldset>
+  
+  <!-- Form Name -->
+ 
+  
+  <!-- Text input-->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="textinput">Service Name:</label>  
+    <div class="col-md-4">
+    <input id="Name" name="Name" disabled type="text" placeholder="" class="form-control input-md" value="{{service.Name}}" ngModel #Name="ngModel">      
+    </div>
+  </div>
+
+
+  <form #form = "ngForm" class="groove">
+      <label class="col-md-4 control-label" for="Logo">Logo:</label>
+        <input type="file" name="photo" ng2FileSelect [uploader]="uploader" enctype = "multipart/form-data"/>
+        <button type="button" class ="btn btn-success btn-s"
+        (click)="uploader.uploadAll()"
+        [disabled] ="!uploader.getNotUploadedItems().length"></button>
+  
+  </form>
+  
+  <!-- Text input-->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="textinput">E-mail:</label>  
+    <div class="col-md-4">
+    <input id="Email" name="Email" type="text" value="{{service.Email}}" placeholder="" class="form-control input-md" ngModel  required #Email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">      
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col col-lg-4 col-lg-push-4">
+      <div *ngIf="Email.errors && (Email.dirty || Email.touched)"
+            class="alert alert-danger">  
+          <div [hidden]="!Email.errors.required">
+            Email is required!
+          </div>
+          <div [hidden]="!Email.errors.pattern">
+            Email form is invalid (example jondoe@gmail.com)
+          </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Textarea -->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="textinput">Description:</label>
+    <div class="col-md-4">                     
+      <textarea class="form-control"  id="Description" name="Description" ngModel  #Description="ngModel">{{service.Description}}</textarea>
+    </div>
+  </div>
+  
+  <!-- Button -->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="addServiceButton"></label>
+    <div class="col-md-4">
+      <button type="submit" id="addServiceButton" name="addServiceButton" class="btn btn-success" [disabled]="!f.valid"><span class="glyphicon glyphicon-ok"></span></button>
+    </div>
+  </div>
+  
+  </fieldset>
+  </form>

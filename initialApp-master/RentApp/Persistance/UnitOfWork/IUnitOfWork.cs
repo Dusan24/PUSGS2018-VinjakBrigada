@@ -9,13 +9,13 @@ namespace RentApp.Persistance.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        IServiceRepository Services { get; set; }
-         IBranchRepository Branches { get; set; }
-         IVehicleRepository Vehicles { get; set; }
-         ITypeOfVehicleRepository TypeOfVehicles { get; set; }
-         IRentRepository Rents { get; set; }
-         IAppUserRepository AppUsers { get; set; }
-       
+        IServicesRepository Services { get; set; }
+        IAppUserRepository AppUser { get; set; }
+        IBranchRepository Branch { get; set; }
+        IRentRepository Rent { get; set; }
+        ITypeOfVehicleRepository TypeOfVehicle { get; set; }
+        IVehicleRepository Vehicle { get; set; }
+        ICommentRepository Comment { get; set;}
         int Complete();
     }
 }

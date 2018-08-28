@@ -2,7 +2,8 @@ export class AppUsers{
     Id:number;
     FullName:String;
     Email:String;
-    BirthDay:Date;
+    DateOfBirth:Date;
     PersonalDocument:string;
     Logo: string;
+    
 }

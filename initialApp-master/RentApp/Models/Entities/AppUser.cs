@@ -10,7 +10,7 @@ namespace RentApp.Models.Entities
         public int Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public DateTime? Birthday { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string PersonalDocument { get; set; }
         public bool Activated { get; set; }
         public string Logo { get; set; }

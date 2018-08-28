@@ -1,8 +1,8 @@
-export class Comment{
+export class Komentar{
     
         constructor(
-            public Service: string,
-            public User: string,
+            public ServiceName: string,
+            public UserEmail: string,
             public Text: string
         ){ }
     }

@@ -11,13 +11,13 @@ import { FileSelectDirective } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { AddServiceComponent } from './add-service/add-service.component';
-import { AddBranchComponent } from './add-branch/branch.component';
+import { AddBranchComponent } from './AddBranch/branch.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
-import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
+import { AddVehicleComponent } from './AddVehicle/vehicle.component';
 import { ClockComponent } from './clock/clock.component';
-import { SignalRService } from 'src/app/services/signal-r.service';
+import { SignalRService } from 'src/app/services/signalR.service';
 import { HomeRegularComponent } from './home-regular/home-regular.component';
 import { AddTypeOfVehicleComponent } from './add-type-of-vehicle/add-type-of-vehicle.component';
 import { OptionServiceComponent } from './option-service/option-service.component';
@@ -33,8 +33,18 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptor';
 import { AddRentComponent } from './add-rent/add-rent.component';
 import { CommentComponent } from './comment/comment.component';
+import { AdminComponent } from './admin/admin.component';
+import { ChangeServiceComponent } from './change-service/change-service.component';
+import { ChangeBranchComponent } from './change-branch/change-branch.component';
+
+import { NgxPayPalModule } from 'ngx-paypal';
 
 const Routes=[
+  {
+    path: "",
+    component: HomeRegularComponent,
+    canActivate: ['CanAlwaysActivateGuard']
+  },
   {
     path: "register",
     component: RegisterFormComponent,
@@ -71,10 +81,6 @@ const Routes=[
     canActivate: [CanActivateViaAuthGuard]
   },
   {
-    path: "options",
-    component: OptionServiceComponent
-  },
-  {
     path: "account",
     component: AccountComponent,
     canActivate: ['CanAppUserActivateGuard']
@@ -100,8 +106,24 @@ const Routes=[
     canActivate: ['CanAppUserActivateGuard']
   },
   {
+    path: "changeService/:id",
+    component: ChangeServiceComponent,
+    canActivate: [CanActivateViaAuthGuard]
+  },
+  {
+    path: "changeBranch/:id",
+    component: ChangeBranchComponent,
+    canActivate: [CanActivateViaAuthGuard]
+  },
+  {
     path: "addComment",
-    component: CommentComponent
+    component: CommentComponent,
+    canActivate: ['CanAppUserActivateGuard']
+  },
+  {
+    path: "Adminova",
+    component: AdminComponent,
+    canActivate: ['CanAppUserActivateGuard']
   }
 ]
 
@@ -125,11 +147,14 @@ const Routes=[
     VehicleComponent,
     AddRentComponent,
     CommentComponent,
-    CommentComponent
+    AdminComponent,
+    ChangeServiceComponent,
+    ChangeBranchComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    NgxPayPalModule,
     HttpClientModule,
     HttpClientXsrfModule,
     AgmCoreModule.forRoot({apiKey: 'AIzaSyDnihJyw_34z5S1KZXp90pfTGAqhFszNJk'}),
@@ -145,6 +170,12 @@ const Routes=[
     {
       provide: 'CanAlwaysActivateGuard',
       useValue: () => { 
+        return true;
+      } 
+    },
+    {
+      provide: 'CanAdminGuard',
+      useValue: () => { if(localStorage.role == 'Admin')
         return true;
       } 
     },

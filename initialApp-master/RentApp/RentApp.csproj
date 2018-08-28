@@ -288,6 +288,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AppUsersController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RentsController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
@@ -355,32 +356,83 @@
     <Compile Include="Migrations\201806212325478_vehicle.Designer.cs">
       <DependentUpon>201806212325478_vehicle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808091234330_menjanje.cs" />
+    <Compile Include="Migrations\201808091234330_menjanje.Designer.cs">
+      <DependentUpon>201808091234330_menjanje.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808091253316_qq.cs" />
+    <Compile Include="Migrations\201808091253316_qq.Designer.cs">
+      <DependentUpon>201808091253316_qq.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808101254111_aaaa.cs" />
+    <Compile Include="Migrations\201808101254111_aaaa.Designer.cs">
+      <DependentUpon>201808101254111_aaaa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808131359472_slike.cs" />
+    <Compile Include="Migrations\201808131359472_slike.Designer.cs">
+      <DependentUpon>201808131359472_slike.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808131558585_comment.cs" />
+    <Compile Include="Migrations\201808131558585_comment.Designer.cs">
+      <DependentUpon>201808131558585_comment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808131617551_comment1.cs" />
+    <Compile Include="Migrations\201808131617551_comment1.Designer.cs">
+      <DependentUpon>201808131617551_comment1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808131650174_comment12.cs" />
+    <Compile Include="Migrations\201808131650174_comment12.Designer.cs">
+      <DependentUpon>201808131650174_comment12.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808141842387_qweqw.cs" />
+    <Compile Include="Migrations\201808141842387_qweqw.Designer.cs">
+      <DependentUpon>201808141842387_qweqw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808141952284_aaaaaa.cs" />
+    <Compile Include="Migrations\201808141952284_aaaaaa.Designer.cs">
+      <DependentUpon>201808141952284_aaaaaa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808142013182_aaaaaa1.cs" />
+    <Compile Include="Migrations\201808142013182_aaaaaa1.Designer.cs">
+      <DependentUpon>201808142013182_aaaaaa1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808151741222_qwqqw.cs" />
+    <Compile Include="Migrations\201808151741222_qwqqw.Designer.cs">
+      <DependentUpon>201808151741222_qwqqw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271747186_image.cs" />
+    <Compile Include="Migrations\201808271747186_image.Designer.cs">
+      <DependentUpon>201808271747186_image.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Entities\Branch.cs" />
+    <Compile Include="Models\Entities\Comment.cs" />
     <Compile Include="Models\Entities\RAIdentityUser.cs" />
     <Compile Include="Models\Entities\AppUser.cs" />
     <Compile Include="Models\Entities\Rent.cs" />
-    <Compile Include="Models\Entities\Service.cs" />
+    <Compile Include="Models\Entities\Services.cs" />
     <Compile Include="Models\Entities\TypeOfVehicle.cs" />
     <Compile Include="Models\Entities\Vehicle.cs" />
     <Compile Include="Persistance\RADBContext.cs" />
     <Compile Include="Persistance\Repository\AppUserRepository.cs" />
     <Compile Include="Persistance\Repository\BranchRepository.cs" />
+    <Compile Include="Persistance\Repository\CommentRepository.cs" />
     <Compile Include="Persistance\Repository\IAppUserRepository.cs" />
     <Compile Include="Persistance\Repository\IBranchRepository.cs" />
+    <Compile Include="Persistance\Repository\ICommentRepository.cs" />
     <Compile Include="Persistance\Repository\IRentRepository.cs" />
     <Compile Include="Persistance\Repository\IRepository.cs" />
-    <Compile Include="Persistance\Repository\IServiceRepository.cs" />
+    <Compile Include="Persistance\Repository\IServicesRepository.cs" />
     <Compile Include="Persistance\Repository\ITypeOfVehicleRepository.cs" />
     <Compile Include="Persistance\Repository\IVehicleRepository.cs" />
     <Compile Include="Persistance\Repository\RentRepository.cs" />
     <Compile Include="Persistance\Repository\Repository.cs" />
-    <Compile Include="Persistance\Repository\ServiceRepository.cs" />
+    <Compile Include="Persistance\Repository\ServicesRepository.cs" />
     <Compile Include="Persistance\Repository\TypeOfVehicleRepository.cs" />
     <Compile Include="Persistance\Repository\VehicleRepository.cs" />
-    <Compile Include="Persistance\UnitOfWork\DemoUnitOfWork.cs" />
+    <Compile Include="Persistance\UnitOfWork\RADBUnitOfWork.cs" />
     <Compile Include="Persistance\UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -509,6 +561,42 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806212325478_vehicle.resx">
       <DependentUpon>201806212325478_vehicle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808091234330_menjanje.resx">
+      <DependentUpon>201808091234330_menjanje.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808091253316_qq.resx">
+      <DependentUpon>201808091253316_qq.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808101254111_aaaa.resx">
+      <DependentUpon>201808101254111_aaaa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808131359472_slike.resx">
+      <DependentUpon>201808131359472_slike.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808131558585_comment.resx">
+      <DependentUpon>201808131558585_comment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808131617551_comment1.resx">
+      <DependentUpon>201808131617551_comment1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808131650174_comment12.resx">
+      <DependentUpon>201808131650174_comment12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808141842387_qweqw.resx">
+      <DependentUpon>201808141842387_qweqw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808141952284_aaaaaa.resx">
+      <DependentUpon>201808141952284_aaaaaa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808142013182_aaaaaa1.resx">
+      <DependentUpon>201808142013182_aaaaaa1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808151741222_qwqqw.resx">
+      <DependentUpon>201808151741222_qwqqw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271747186_image.resx">
+      <DependentUpon>201808271747186_image.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

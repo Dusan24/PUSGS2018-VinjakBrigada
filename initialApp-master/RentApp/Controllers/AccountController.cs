@@ -18,6 +18,7 @@ using RentApp.Models.Entities;
 using RentApp.Providers;
 using RentApp.Results;
 using RentApp.Persistance.UnitOfWork;
+using RentApp.Hubs;
 
 namespace RentApp.Controllers
 {
@@ -26,6 +27,7 @@ namespace RentApp.Controllers
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
+
         private readonly IUnitOfWork unitOfWork;
 
         public AccountController()
@@ -68,7 +70,7 @@ namespace RentApp.Controllers
                 return null;
             }
 
-            AppUser currentUser = unitOfWork.AppUsers.Get(email);
+            AppUser currentUser = unitOfWork.AppUser.Get(email);
 
             if (currentUser == null)
             {
@@ -87,15 +89,15 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            foreach (AppUser u in unitOfWork.AppUsers.GetAll())
+            foreach (AppUser u in unitOfWork.AppUser.GetAll())
             {
                 if (u.Email == model.Email)
                 {
                     u.FullName = model.FullName;
-                    u.Birthday = model.DateOfBirth;
+                    u.DateOfBirth = model.DateOfBirth;
                     u.Logo = model.Logo;
 
-                    unitOfWork.AppUsers.Update(u);
+                    unitOfWork.AppUser.Update(u);
                     unitOfWork.Complete();
 
                     return Ok();
@@ -154,6 +156,7 @@ namespace RentApp.Controllers
         }
 
         // POST api/Account/ChangePassword
+        [AllowAnonymous]
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -164,7 +167,7 @@ namespace RentApp.Controllers
 
             var userId = UserManager.FindByName(model.Email)?.Id;
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+            IdentityResult result = await UserManager.ChangePasswordAsync(userId, model.OldPassword,
                 model.NewPassword);
             
             if (!result.Succeeded)
@@ -327,7 +330,7 @@ namespace RentApp.Controllers
             List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
 
             string state;
-             
+
             if (generateState)
             {
                 const int strengthInBits = 256;
@@ -369,7 +372,7 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            foreach (AppUser u in unitOfWork.AppUsers.GetAll())
+            foreach (AppUser u in unitOfWork.AppUser.GetAll())
             {
                 if (u.Email == model.Email)
                 {
@@ -377,7 +380,7 @@ namespace RentApp.Controllers
                 }
             }
 
-            var appuser = new AppUser() { FullName = model.FullName, Email = model.Email, Birthday = model.DateOfBirth, Activated = false, PersonalDocument = null, Rents = new List<Rent>() };
+            var appuser = new AppUser() { FullName = model.FullName, Email = model.Email, DateOfBirth = model.DateOfBirth, Activated = false, PersonalDocument = null, Rents = new List<Rent>() };
 
             var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, AppUser = appuser, PasswordHash = RAIdentityUser.HashPassword(model.Password) };
 
@@ -389,6 +392,8 @@ namespace RentApp.Controllers
             }
 
             UserManager.AddToRole(user.Id, "AppUser");
+
+            NotificationsHub.NotifyAdmin("New user added!");
 
             return Ok();
         }

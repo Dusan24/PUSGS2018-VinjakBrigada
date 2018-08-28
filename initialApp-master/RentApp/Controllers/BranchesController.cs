@@ -27,7 +27,36 @@ namespace RentApp.Controllers
 
         public IEnumerable<Branch> GetBranches()
         {
-            return unitOfWork.Branches.GetAll();
+            return unitOfWork.Branch.GetAll();
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        [Route("api/Branches/ChangeBranchData")]
+        [HttpPost]
+        public IHttpActionResult ChangeBranchData(Branch branch)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var bra = unitOfWork.Branch.Get(branch.Id);
+
+            if (bra == null)
+            {
+                return NotFound();
+            }
+
+            bra.Address = branch.Address;
+            if (branch.Logo != null)
+                bra.Logo = branch.Logo;
+            bra.Latitude = branch.Latitude;
+            bra.Longitude = branch.Longitude;
+
+            unitOfWork.Branch.Update(bra);
+            unitOfWork.Complete();
+
+            return Ok();
         }
 
         [AllowAnonymous]
@@ -35,6 +64,7 @@ namespace RentApp.Controllers
         [HttpGet]
         public List<Branch> ReturnBranchesByServer(int model)
         {
+            //int id = Int32.Parse(model);
             var service = unitOfWork.Services.Get(model);
             List<Branch> lista = new List<Branch>();
 
@@ -49,7 +79,7 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Branch))]
         public IHttpActionResult GetBranch(int id)
         {
-            Branch branch = unitOfWork.Branches.Get(id);
+            Branch branch = unitOfWork.Branch.Get(id);
             if (branch == null)
             {
                 return NotFound();
@@ -57,6 +87,7 @@ namespace RentApp.Controllers
 
             return Ok(branch);
         }
+
         [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutBranch(int id, Branch branch)
@@ -70,10 +101,10 @@ namespace RentApp.Controllers
             {
                 return BadRequest();
             }
-
+            
             try
             {
-                unitOfWork.Branches.Update(branch);
+                unitOfWork.Branch.Update(branch);
                 unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
@@ -90,6 +121,7 @@ namespace RentApp.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
+
         [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Branch))]
         public IHttpActionResult PostBranch(BranchBindingModel branch)
@@ -101,7 +133,7 @@ namespace RentApp.Controllers
 
             Branch bra = new Branch() { Address = branch.Adress, Latitude = branch.Latitude, Logo = branch.Logo, Longitude = branch.Longitude };
             var services = unitOfWork.Services.GetAll();
-            Service service = new Service();
+            Services service = new Services();
 
             foreach (var item in services)
             {
@@ -114,28 +146,29 @@ namespace RentApp.Controllers
 
             service.Branches.Add(bra);
 
-            unitOfWork.Branches.Add(bra);
+            unitOfWork.Branch.Add(bra);
             unitOfWork.Services.Update(service);
             unitOfWork.Complete();
-
+            
             return CreatedAtRoute("DefaultApi", new { id = bra.Id }, branch);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Branch))]
         public IHttpActionResult DeleteBranch(int id)
         {
-            var bra = unitOfWork.Branches.Get(id);
+            var bra = unitOfWork.Branch.Get(id);
 
             if (bra == null)
             {
                 return NotFound();
             }
 
-            var listOfUsers = unitOfWork.AppUsers.GetAll();
-            var listOfRents = unitOfWork.Rents.GetAll();
+            var listOfUsers = unitOfWork.AppUser.GetAll();
+            var listOfRents = unitOfWork.Rent.GetAll();
 
             List<Rent> listRentsDelete = new List<Rent>();
-
+            
             foreach (var r in listOfRents)
             {
                 if (r.Branch.Id == bra.Id)
@@ -160,10 +193,10 @@ namespace RentApp.Controllers
 
             for (int i = 0; i < brojRent; i++)
             {
-                unitOfWork.Rents.Remove(listRentsDelete[i]);
+                unitOfWork.Rent.Remove(listRentsDelete[i]);
             }
 
-            unitOfWork.Branches.Remove(bra);
+            unitOfWork.Branch.Remove(bra);
             unitOfWork.Complete();
 
             return Ok(bra);
@@ -180,7 +213,7 @@ namespace RentApp.Controllers
 
         private bool BranchExists(int id)
         {
-            return unitOfWork.Branches.Get(id) != null;
+            return unitOfWork.Branch.Get(id) != null;
         }
     }
 }

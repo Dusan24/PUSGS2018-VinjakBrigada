@@ -3,6 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 
+
 import { Observable } from 'rxjs/Observable';
 
 @Injectable({
@@ -24,5 +25,13 @@ export class CommentService {
 
     getListOfServers(): Observable<any> {
       return this.httpClient.get('http://localhost:51680/api/Services');
+    }
+
+    getCommentsByServiceId(name) : Observable<any>{
+      return this.httpClient.get(`http://localhost:51680/api/Comments/ReturnCommentsByServiceId?name=${name}`);
+    }
+
+    postComments(comment) : Observable<any>{
+      return this.httpClient.post("http://localhost:51680/api/Comments",comment);
     }
 }

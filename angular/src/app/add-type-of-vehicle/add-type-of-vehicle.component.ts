@@ -23,7 +23,7 @@ export class AddTypeOfVehicleComponent implements OnInit {
     this.addTypeOfVehicleService.postTypeOfVehicle(typeofvehicle)
     .subscribe(
       data=> {
-        alert("You have  successfully added type of vehicle!");
+        alert("You have been successfully add type of vehicle!");
       },
       error => {
         console.log(error);

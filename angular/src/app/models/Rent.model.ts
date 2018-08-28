@@ -1,4 +1,5 @@
 export class Rent{
+    public Start:Date;
     public End:Date;
     public Branch:number;
     public Vehicle:number;

@@ -23,16 +23,24 @@ export class AddServiceService {
       return Observable.throw(errorMessage);
     }
 
-    getAllServices() : Observable<any>{
-      return this.httpClient.get('http://localhost:51680/api/Services');
+    ChangeServiceData(changedService) : Observable<any>{
+      return this.httpClient.post('http://localhost:51680/api/Services/ChangeServiceData', changedService);
     }
+
+    getServiceById(id) : Observable<any>{
+      return this.httpClient.get(`http://localhost:51680/api/Services/ReturnServiceById?id=${id.id}`);
+    }
+
+    /*getAllBranches() : Observable<any>{
+      return this.httpClient.get('http://localhost:51680/api/Branches');
+    }*/
 
     postService(newService) : Observable<any>{
       return this.httpClient.post('http://localhost:51680/api/Services', newService);
     }
 
-    deleteService(delService) : Observable<any>{
+    /*deleteService(delService) : Observable<any>{
       return this.httpClient.delete(`http://localhost:51680/api/Services?id=${delService}`);
-    }
+    }*/
 
 }

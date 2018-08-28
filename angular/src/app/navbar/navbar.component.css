@@ -1,9 +1,11 @@
-ul
-{
-    color: blue!important;
-    background: blue !important;
-}
-a
-{
-    background: blue !important;
-}
+#more {
+    cursor:pointer;
+    -webkit-user-select: none;
+-moz-user-select: none;
+-khtml-user-select: none;
+-ms-user-select: none;
+text-decoration: none
+  }
+  ul{
+    background-color: blue
+  }
