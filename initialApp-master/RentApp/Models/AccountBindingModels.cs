@@ -197,7 +197,19 @@ namespace RentApp.Models
         [Display(Name = "ServerName")]
         public string ServerName { get; set; }
     }
+    public class TransactionBindingModel
+    {
+        [DataType(DataType.Text)]
+        [Display(Name = "OrderID")]
+        public string OrderID { get; set; }
+        [DataType(DataType.Text)]
+        [Display(Name = "PaymentID")]
+        public string PaymentID { get; set; }
+        [DataType(DataType.Text)]
+        [Display(Name = "PayerID")]
+        public string PayerID { get; set; }
 
+    }
     public class RentBindingModel
     {
         [Required]
@@ -224,5 +236,7 @@ namespace RentApp.Models
         [DataType(DataType.Text)]
         [Display(Name = "User")]
         public string User { get; set; }
+        
+
     }
 }

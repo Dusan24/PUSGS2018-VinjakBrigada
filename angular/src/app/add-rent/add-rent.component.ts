@@ -7,8 +7,9 @@ import { AddRentService } from 'src/app/services/add-rent.service';
 import { ActivatedRoute } from '@angular/router'
 import { Branch } from 'src/app/models/Branch.model';
 import { Vehicle } from 'src/app/models/Vehicle.model';
+import { Transaction } from 'src/app/models/Transaction.model'
 
-import { PayPalConfig, PayPalEnvironment, PayPalIntegrationType } from 'ngx-paypal';
+import { IPayPalCancelPaymentData, PayPalConfig, PayPalEnvironment, PayPalIntegrationType, PayPalFunding } from 'ngx-paypal';
 import { debug } from 'util';
 
 @Component({
@@ -17,15 +18,16 @@ import { debug } from 'util';
   styleUrls: ['./add-rent.component.css']
 })
 export class AddRentComponent implements OnInit {
-
+  id : number;
   rent : Rent;
   public idServe: any;
   braches: Branch[];
   Tempvehicle: Vehicle[];
   vehicle: Vehicle[];
-
+  transaction: Transaction;
+  billingId : string;
   public payPalConfig?: PayPalConfig;
-
+  public iPayPalCancelPaymentData : IPayPalCancelPaymentData;
   someDate: Date;
   someDate2: Date;
   today: Date;
@@ -82,6 +84,7 @@ export class AddRentComponent implements OnInit {
           this.Tempvehicle.forEach(obj => {
             if(obj.Unavailable==false){
               this.vehicle.push(obj);
+              
             }
           })
         }
@@ -104,7 +107,7 @@ export class AddRentComponent implements OnInit {
   payWithPayPal(){
     this.startDay = document.getElementsByName("Start")[0];
     this.endDay = document.getElementsByName("End")[0];
-
+    debugger
     this.today = new Date();
     this.someDate = new Date(this.startDay.value);
     if(this.someDate < this.today){
@@ -142,21 +145,40 @@ export class AddRentComponent implements OnInit {
               this.pricePH = element.PricePerHour;
             }
           });
-      
+            
           this.payPalConfig = new PayPalConfig(PayPalIntegrationType.ClientSideREST, PayPalEnvironment.Sandbox, {
             commit: true,
             client: {
               sandbox: 'AZSmskKm8ruIMMSoKaK-t3dUpJ0LykT7c43YHKjqlZhYu1IQywNRV3Nu2QKBQZlHofcd55cYwd_b15Ub'
             },
+            
             button: {
               label: 'paypal',
             },
             onPaymentComplete: (data, actions) => {
+              debugger
+              
+              this.transaction.OrderID = data.orderID;
+              this.transaction.PayerID = data.payerID;
+              this.transaction.PaymentID = data.paymentID;
+              alert(data.paymentID);
               console.log('OnPaymentComplete');
+              this.addRentService.PostTransaction(this.transaction);              
             },
-            onCancel: (data, actions) => {
-              console.log('OnCancel');
+
+            onCancel:(data,actions) =>
+            {
+              debugger
+              
+              this.transaction.OrderID = data.data.billingID;
+              this.transaction.PayerID = data.data.paymentID;
+              this.transaction.PaymentID = data.data.paymentID;
+              alert(this.billingId);
+              console.log('OnPaymentComplete');
+              this.addRentService.PostTransaction(this.transaction); 
             },
+            
+            
             onError: (err) => {
               console.log('OnError');
             },
@@ -167,13 +189,13 @@ export class AddRentComponent implements OnInit {
                 total: this.pricePH * this.difference
               }
             }]
+            
           });
         }
       }
     }
-   
+    
   }
-
   /*callGetVehicle(){
     this.addRentService.getAllVehicle(this.idServe)
     .subscribe(
@@ -200,6 +222,8 @@ export class AddRentComponent implements OnInit {
   onSubmit(rentt:Rent){
     this.today = new Date();
     this.someDate = new Date(rentt.Start);
+    
+    
     if(this.someDate < this.today){
       alert("You cannot reserve vehicle before today!");
       return;
@@ -223,10 +247,12 @@ export class AddRentComponent implements OnInit {
         }
         else{
           debugger
+          
           this.rent.Start = rentt.Start;
           this.rent.End = rentt.End;
           this.rent.User = localStorage.email;
           this.rent.Vehicle = rentt.Vehicle;
+          
           
           this.addRentService.postRent(this.rent)
           .subscribe(

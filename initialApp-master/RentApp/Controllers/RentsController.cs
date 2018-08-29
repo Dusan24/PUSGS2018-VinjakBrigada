@@ -122,7 +122,7 @@ namespace RentApp.Controllers
 
                 var branch = unitOfWork.Branch.Get(rent.Branch);
 
-                Rent rr = new Rent() { Branch = branch, Vehicle = vehicle, Start = rent.Start, End = rent.End };
+                Rent rr = new Rent() { Branch = branch, Vehicle = vehicle, Start = rent.Start, End = rent.End};
 
                 var user = unitOfWork.AppUser.Get(rent.User);
 

@@ -60,7 +60,7 @@ namespace RentApp
             container.RegisterType<ITypeOfVehicleRepository, TypeOfVehicleRepository>();
             container.RegisterType<IVehicleRepository, VehicleRepository>();
             container.RegisterType<ICommentRepository, CommentRepository>();
-
+            container.RegisterType<ITransactionRepository, TransactionRepository>();
             container.RegisterType<IUnitOfWork, RADBUnitOfWork>();
 
             container.RegisterType<DbContext, RADBContext>(new PerRequestLifetimeManager());

@@ -32,7 +32,7 @@ namespace RentApp.Controllers
         [AllowAnonymous]
         [Route("api/Vehicle/ReturnVehiclesByServer")]
         [HttpGet]
-        public List<Vehicle> ReturnVehiclesByServer(int model)
+        public IEnumerable<Vehicle> ReturnVehiclesByServer(int model)
         {
             //int id = Int32.Parse(model);
             var service = unitOfWork.Services.Get(model);
@@ -43,7 +43,7 @@ namespace RentApp.Controllers
                 lista.Add(item);
             }
 
-            return lista;
+            return lista as IEnumerable<Vehicle>;
         }
 
         [Authorize(Roles = "Admin, Manager")]

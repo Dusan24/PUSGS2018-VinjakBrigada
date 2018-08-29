@@ -4,6 +4,7 @@ export class Rent{
     public Branch:number;
     public Vehicle:number;
     public User:string;
+    public Bill:string;
 
     constructor(branch:number){
         this.Branch = branch;

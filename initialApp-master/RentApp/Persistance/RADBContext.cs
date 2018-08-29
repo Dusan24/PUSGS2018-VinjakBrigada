@@ -17,7 +17,7 @@ namespace RentApp.Persistance
         public virtual DbSet<Rent> Rents { get; set; }
         public virtual DbSet<Branch> Branches {get;set;}
         public virtual DbSet<Comment> Comments { get; set; }
-
+        public virtual DbSet<Transaction> Transactions { get; set; }
 
         public RADBContext() : base("name=RADB")
         {

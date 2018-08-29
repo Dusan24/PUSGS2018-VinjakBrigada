@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
-
+import {Transaction} from 'src/app/models/Transaction.model'
 import { Observable } from 'rxjs/Observable';
 import { Rent } from 'src/app/models/Rent.model';
 
@@ -38,5 +38,8 @@ export class AddRentService {
 
     public getAllVehicle(id) : Observable<any>{
       return this.httpClient.get(`http://localhost:51680/api/Vehicle/ReturnVehiclesByServer?model=${id.id}`);
+    }
+    public PostTransaction(transaction:Transaction) : Observable<any>{
+      return this.httpClient.post('http://localhost:51680/api/Transactions', transaction);
     }
 }

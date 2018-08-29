@@ -292,6 +292,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RentsController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
+    <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Controllers\TypeOfVehiclesController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -404,6 +405,14 @@
     <Compile Include="Migrations\201808271747186_image.Designer.cs">
       <DependentUpon>201808271747186_image.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808291116392_renta.cs" />
+    <Compile Include="Migrations\201808291116392_renta.Designer.cs">
+      <DependentUpon>201808291116392_renta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808291318500_trans.cs" />
+    <Compile Include="Migrations\201808291318500_trans.Designer.cs">
+      <DependentUpon>201808291318500_trans.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -413,6 +422,7 @@
     <Compile Include="Models\Entities\AppUser.cs" />
     <Compile Include="Models\Entities\Rent.cs" />
     <Compile Include="Models\Entities\Services.cs" />
+    <Compile Include="Models\Entities\Transaction.cs" />
     <Compile Include="Models\Entities\TypeOfVehicle.cs" />
     <Compile Include="Models\Entities\Vehicle.cs" />
     <Compile Include="Persistance\RADBContext.cs" />
@@ -425,11 +435,13 @@
     <Compile Include="Persistance\Repository\IRentRepository.cs" />
     <Compile Include="Persistance\Repository\IRepository.cs" />
     <Compile Include="Persistance\Repository\IServicesRepository.cs" />
+    <Compile Include="Persistance\Repository\ITransactionRepository.cs" />
     <Compile Include="Persistance\Repository\ITypeOfVehicleRepository.cs" />
     <Compile Include="Persistance\Repository\IVehicleRepository.cs" />
     <Compile Include="Persistance\Repository\RentRepository.cs" />
     <Compile Include="Persistance\Repository\Repository.cs" />
     <Compile Include="Persistance\Repository\ServicesRepository.cs" />
+    <Compile Include="Persistance\Repository\TransactionRepository.cs" />
     <Compile Include="Persistance\Repository\TypeOfVehicleRepository.cs" />
     <Compile Include="Persistance\Repository\VehicleRepository.cs" />
     <Compile Include="Persistance\UnitOfWork\RADBUnitOfWork.cs" />
@@ -597,6 +609,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808271747186_image.resx">
       <DependentUpon>201808271747186_image.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808291116392_renta.resx">
+      <DependentUpon>201808291116392_renta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808291318500_trans.resx">
+      <DependentUpon>201808291318500_trans.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
